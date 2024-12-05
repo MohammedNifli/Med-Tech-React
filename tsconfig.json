@@ -1,0 +1,17 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",  // Make sure this is correctly set to the root of your project
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "@/*": ["./src/*"],  // Updated the @ alias to correctly map to the src folder
+      "@redux/*": ["src/redux/*"]
+    }
+  }
+}
+
+
