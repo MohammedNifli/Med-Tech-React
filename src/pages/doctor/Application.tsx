@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  FormEvent, useCallback, useEffect, useState } from "react";
 import { FaKey } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 
@@ -8,9 +8,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { applyForApproval } from "../../services/doctorServices";
 import PasswordModal from "../../components/doctorSide/passwordModal";
 import { uploadFileToS3 } from "../../utils/s3Upload";
-import { profile } from "console";
 
 interface FormData {
+  certificates?: File[] |boolean;
+  licenseFiles?: File[] |boolean;
   name: string;
   gender: string;
   dateOfBirth: string;
@@ -32,10 +33,13 @@ interface FormData {
   clinicName: string;
   clinicAddress: string;
   clinicContact: string;
-  onlineConsultation: boolean;
-  offlineConsultation: boolean;
-  onlineConsultationFee: string;
-  offlineConsultationFee: string;
+  onlineConsultation?: boolean;
+  offlineConsultation?: boolean;
+  onlineConsultationFee?: string;
+  offlineConsultationFee?: string;
+  
+  
+
 }
 
 interface FormErrors {
@@ -49,10 +53,17 @@ interface InputFieldProps {
   options?: string[];
   value?: string;
   checked?: boolean;
-  onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   error?: string;
   multiple?: boolean;
 }
+
+interface ProfileImageFileInfo extends File {
+  name: string;
+  type: string;
+}
+
+
 
 const Application: React.FC = () => {
   // const [image, setImage] = useState('');
@@ -61,7 +72,7 @@ const Application: React.FC = () => {
   const docId = doctorAuth.doctorInfo?.docId as string;
   console.log("docId", docId);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     gender: "",
     dateOfBirth: "",
@@ -101,8 +112,10 @@ const Application: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [profileImage, setProfileImage] = useState(null);
-  const [profileImageFile,setProfileImageFile]=useState('')
+   const [profileImage, setProfileImage] = useState<ProfileImageFileInfo | null>(
+    null
+  );
+  const [profileImageFile,setProfileImageFile]=useState<File | null>(null)
 
   const handleChange = useCallback((
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -123,10 +136,7 @@ const Application: React.FC = () => {
         setProfileImage(file);
   
         // Set file metadata (name and type) to the state
-        setProfileImageFile({
-          name: file.name, // The name of the file
-          type: file.type, // The MIME type of the file
-        });
+        setProfileImageFile(file);
       };
       reader.readAsDataURL(file); // Read the file as a data URL
     }
@@ -155,12 +165,11 @@ const Application: React.FC = () => {
   const handleLicenseFileChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    if (e.target.files) {
-      const filesArray = Array.from(e.target.files);
-      setLicenseFiles(filesArray);
+    const target = e.target as HTMLInputElement;
+    if (target.files) {
+      const filesArray = Array.from(target.files);
+      setLicenseFiles(filesArray); // Assuming this sets the files array in state
       setSelectedLicenseFiles(filesArray.map((file) => file.name)); // Update names for display
-
-      // Optionally create previews as shown above
     }
   };
 
@@ -254,8 +263,8 @@ const Application: React.FC = () => {
     }
 
     // File Validation
-    if (data.licenseFiles && data.licenseFiles.length > 0) {
-      Array.from(data.licenseFiles).forEach((file, index) => {
+    if (data?.licenseFiles && Array.isArray(data?.licenseFiles)&& data?.licenseFiles?.length>0) {
+      Array.from(data?.licenseFiles).forEach((file, index) => {
         if (!isValidFileType(file)) {
           errors[`licenseFiles_${index}`] =
             "Invalid file type. Please upload JPG, PNG or PDF";
@@ -266,7 +275,7 @@ const Application: React.FC = () => {
       });
     }
 
-    if (data.certificates && data.certificates.length > 0) {
+    if (data.certificates && Array.isArray(data?.certificates)&& data.certificates.length > 0) {
       Array.from(data.certificates).forEach((file, index) => {
         if (!isValidFileType(file)) {
           errors[`certificates_${index}`] =
@@ -364,14 +373,15 @@ const Application: React.FC = () => {
     return file.size <= maxSize;
   };
 
-  const handleCertificatesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const filesArray = Array.from(e.target.files);
+  const handleCertificatesChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    if ((e.target as HTMLInputElement).files) {
+      const filesArray = Array.from((e.target as HTMLInputElement).files!);
       setCertificates(filesArray);
-      setSelectedCertificateFiles(filesArray.map((file) => file.name)); // Update names for display
+      setSelectedCertificateFiles(filesArray.map((file) => file.name));
     }
   };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -484,7 +494,7 @@ const Application: React.FC = () => {
       // Prepare files for generating presigned URLs
       const files = [
         ...certificates.map((cert) => ({ fileName: cert.name, fileType: cert.type })),
-        ...licenseFiles.map((file) => ({ fileName: file.name, fileType: file.type })),
+        ...(licenseFiles? licenseFiles.map((file) => ({ fileName: file.name, fileType: file.type })):[]),
       ];
       
       // Request presigned URLs for all files
@@ -498,7 +508,7 @@ const Application: React.FC = () => {
       console.log("Presigned URLs:", presignedUrls);
       
       // Upload all files to S3
-      const allFiles = [...certificates, ...licenseFiles];
+      const allFiles = [...certificates, ...licenseFiles ?? []];
       const uploadPromises = allFiles.map((file, index) => {
         return uploadFileToS3(presignedUrls[index], file);
       });
@@ -511,7 +521,7 @@ const Application: React.FC = () => {
       const certificateUrls = presignedUrls.slice(0, certificates.length); // For certificate files
       
       // Append the uploaded file URLs to formDataToSend
-      licenseUrls.forEach((url:unknown) => {
+      licenseUrls.forEach((url: string) => {
         const pre_url=url.split('?')[0]
         formDataToSend.append("licenses", pre_url) 
         console.log('license pre_url',pre_url)
@@ -519,7 +529,7 @@ const Application: React.FC = () => {
 
 
       });
-      certificateUrls.forEach((url:unknown) => {
+      certificateUrls.forEach((url:string) => {
         const pre_url=url.split('?')[0]
         formDataToSend.append("certificates", pre_url)
         console.log('certificates pre_url',pre_url)
@@ -659,7 +669,7 @@ const Application: React.FC = () => {
             <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center relative overflow-hidden">
               {profileImage ? (
                 <img
-                  src={profileImage}
+                  src={profileImage?.name || ''}
                   alt="Selected"
                   className="w-full h-full object-cover rounded-full"
                 />
@@ -1031,3 +1041,6 @@ const Application: React.FC = () => {
 // );
 
 export default Application;
+
+
+

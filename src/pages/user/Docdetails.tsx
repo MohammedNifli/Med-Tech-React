@@ -4,26 +4,74 @@ import { CheckCircle, ThumbsUp, MapPin } from "lucide-react";
 import "react-datepicker/dist/react-datepicker.css";
 // import { IoCalendar } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import AxiosInstance from "../../utils/axiosClient";
 import { useSelector } from "react-redux";
-import { AttachmentIcon } from "@chakra-ui/icons";
+// import { AttachmentIcon } from "@chakra-ui/icons";
 import { RootState } from "../../reduxStore/store";
 import { toast, ToastContainer } from "react-toastify";
 
+import { Doctor } from '../../types/doctor';
+
+
 // Dummy doctor data
 
-interface TimeSlot {
-  _id?: string;  
-  date:string;
-  startTime: string;
-  endTime: string;
-  status:string;
+// interface TimeSlot {
+//   _id?: string;  
+//   date:string;
+//   startTime: string;
+//   endTime: string;
+//   status:string;
+// }
+
+// interface RouteParams {
+//   id: string;
+// }
+
+
+interface clinicData{
+  name:string,
+  rating:number,
+  address:[]
+
 }
 
-interface RouteParams {
-  id: string;
+interface TimeSlot {
+  _id: string;
+  startTime: string;
+  endTime: string;
+  status: string;
 }
+
+interface DoctorProfile {
+  personalInfo: {
+    name: string;
+    profilePicture: string;
+  };
+  professionalInfo: {
+    specialization: string;
+    experience: number;
+  };
+  accountStatus: {
+    verificationStatus: boolean;
+  };
+  practiceInfo: {
+    clinics: Clinic[];
+  };
+
+  financialInfo:{
+    consultationFees:{
+      online:boolean;
+      offline:boolean
+    }
+  }
+}
+
+interface Clinic {
+  name: string;
+  address: string;
+}
+
 
 const ClinicVisitBooking:React.FC = () => {
   const navigate=useNavigate()
@@ -31,11 +79,11 @@ const ClinicVisitBooking:React.FC = () => {
   const user=useSelector((state:RootState)=>state.auth.user?._id)
   console.log("user",user)
   
-  const [timeSlots, setTimeSlots] = useState([]);
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [visitType, setVisitType] = useState<string>("offline");
-  const [docProfile,setDocProfile]=useState(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [visitType, setVisitType] = useState<"online" | "offline">("offline");
+  const [docProfile,setDocProfile]=useState<DoctorProfile | undefined>();
   
   
   const today = new Date().toLocaleDateString('en-CA');
@@ -78,7 +126,7 @@ const ClinicVisitBooking:React.FC = () => {
     fetchTimeSlot(selectedDate);
   }, [docId, selectedDate]);
 
-  const handleDateChange = (e) => {
+  const handleDateChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(e.target.value);
     if (date) {
       setSelectedDate(date);
@@ -90,20 +138,23 @@ const ClinicVisitBooking:React.FC = () => {
     setSelectedTime(startTime);
   };
   
-  const handleVisitTypeChange = (type: string) => {
+  const handleVisitTypeChange = (type:"online"|"offline") => {
     
     setVisitType(type);
     console.log("type",visitType)
   };
 
   const handleSave = async () => {
-    let money = 0;
-    if (visitType === 'online') {
-      money = docProfile?.financialInfo?.consultationFees?.online;
-    } else {
-      money = docProfile?.financialInfo?.consultationFees?.offline;
-    }
-    console.log("money", money);
+    let money: number | null = null;
+if (visitType === 'online') {
+  money = typeof docProfile?.financialInfo?.consultationFees?.online === 'number' 
+    ? docProfile?.financialInfo?.consultationFees?.online 
+    : null;
+} else {
+  money = typeof docProfile?.financialInfo?.consultationFees?.offline === 'number' 
+    ? docProfile?.financialInfo?.consultationFees?.offline 
+    : null;
+}
     
     const appointmentData = {
       userId: user,
@@ -236,17 +287,19 @@ const ClinicVisitBooking:React.FC = () => {
     </div>
   );
 };
+
 const DoctorProfileWithBooking = () => {
+
   const { id: docId } = useParams();
-  const [doctorData, setDoctorData] = useState('');
-  const [clinicData, setClinicData] = useState([]);
+  const [doctorData, setDoctorData] = useState<Doctor|undefined>();
+  const [clinicData, setClinicData] = useState<clinicData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchDoctorDetails = async () => {
       setIsLoading(true);
-      setError(null);
+      setError('');
       try {
         const response = await axios.get(
           `http://localhost:4444/user/doctor-profile?id=${docId}`,
@@ -285,33 +338,33 @@ const DoctorProfileWithBooking = () => {
         <div className="p-6">
           <div className="flex items-start mb-6">
             <img
-              src={doctorData.personalInfo?.profilePicture}
-              alt={doctorData.personalInfo?.name}
+              src={doctorData?.personalInfo?.profilePicture}
+              alt={doctorData?.personalInfo?.name}
               className="w-24 h-24 rounded-full object-cover mr-6"
             />
 
             <div>
               <h1 className="text-2xl font-bold text-gray-800">
-                {doctorData.personalInfo?.name}
+                {doctorData?.personalInfo?.name}
               </h1>
-              {doctorData.accountStatus?.verificationStatus && (
+              {doctorData?.accountStatus?.verificationStatus && (
                 <span className="text-sm text-green-600 font-semibold">
                   Profile is claimed
                 </span>
               )}
               <p className="text-gray-600 mt-1">
-                {doctorData.professionalInfo?.specialization}
+                {doctorData?.professionalInfo?.specialization}
               </p>
               <p className="text-gray-600 text-sm mt-1">
-                {doctorData.professionalInfo?.experience} years of experience in{" "}
-                {doctorData.professionalInfo?.specialization}
+                {doctorData?.professionalInfo?.experience} years of experience in{" "}
+                {doctorData?.professionalInfo?.specialization}
               </p>
 
               <div className="mt-3 inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-md text-sm">
                 Trusted Care. Lasting Smiles.
               </div>
 
-              {doctorData.accountStatus?.verificationStatus && (
+              {doctorData?.accountStatus?.verificationStatus && (
                 <div className="mt-3 flex items-center">
                   <CheckCircle className="text-green-600 w-5 h-5 mr-2" />
                   <span className="text-green-600 text-sm">
@@ -323,10 +376,10 @@ const DoctorProfileWithBooking = () => {
               <div className="mt-2 flex items-center">
                 <ThumbsUp className="text-green-600 w-5 h-5 mr-2" />
                 <span className="text-green-600 font-bold">
-                  {doctorData.rating}%
+                  {doctorData?.rating}%
                 </span>
                 <span className="text-gray-600 text-sm ml-1">
-                  ({doctorData.reviews} patients)
+                  ({doctorData?.reviews} patients)
                 </span>
               </div>
             </div>
@@ -369,10 +422,10 @@ const DoctorProfileWithBooking = () => {
                 <p className="text-gray-600 text-sm">{}</p>
               </div>
               <p className="mt-2 text-gray-800 font-semibold">
-                ₹ online : {doctorData.financialInfo.consultationFees?.online}
+                ₹ online : {doctorData?.financialInfo.consultationFees?.online}
               </p>
               <p className="mt-2 text-gray-800 font-semibold">
-                ₹ online : {doctorData.financialInfo.consultationFees?.offline}
+                ₹ online : {doctorData?.financialInfo.consultationFees?.offline}
               </p>
             </div>
           ))}

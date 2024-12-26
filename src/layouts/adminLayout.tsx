@@ -17,7 +17,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {shouldShowHeaderAndSider && <Sider />}
       <div className={`flex-1 flex flex-col overflow-hidden ${!shouldShowHeaderAndSider ? 'w-full' : ''}`}>
         {/* Render Admin Header only if it should be shown */}
-        {shouldShowHeaderAndSider && <AdminHead />}
+        {shouldShowHeaderAndSider && <AdminHead onSearch={()=>{}} />}
         <div className={`flex-1 overflow-auto ${shouldShowHeaderAndSider ? 'p-4' : ''}`}>
           {/* Render child components */}
           {children}

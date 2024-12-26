@@ -8,9 +8,9 @@ import { useState,useEffect } from "react";
     console.log('searchParmas',searchTerm)
 
     const [data,setData]=useState('');
-    const [loading,SetLoading]=useState(false);
+    const [loading,setLoading]=useState(false);
     const [error,setError]=useState<string | null>(null)
-    const [ selectedStateConst , setselectedStateConst] = useState()
+    const [ selectedStateConst , setselectedStateConst] = useState<string| undefined>()
 
     useEffect(() => {
         if(selectedState !== ''){
@@ -36,6 +36,8 @@ import { useState,useEffect } from "react";
   
             setData(response.data);
           } catch (error) {
+            console.log(error)
+          
             setError('Failed to fetch');
           } finally {
             setLoading(false); // Ensure loading state is reset

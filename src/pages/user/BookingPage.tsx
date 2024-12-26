@@ -5,10 +5,10 @@ import {
   MessageSquare,
   Calendar,
   Clock,
-  Award,
-  ThumbsUp,
+
   ChevronLeft,
   ChevronRight,
+  MessageCircle,
   X,
 } from "lucide-react";
 import {
@@ -19,7 +19,7 @@ import {
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
-  isSameMonth,
+
   addMonths,
   subMonths,
 } from "date-fns";
@@ -28,13 +28,50 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reduxStore/store";
 import axios from "axios";
 import AxiosInstance from "../../utils/axiosClient";
-import { profileEnd } from "console";
+
 import { toast } from "react-toastify";
 import axiosInstance from "../../utils/axiosClient";
 
+import { v4 as uuidv4 } from 'uuid';
+
+const uniqueId: string = uuidv4();
+
+
+
+interface Finance{
+  consultationFees:{
+    online?:number;
+    offline?:number;
+  }
+}
+
+interface PersonalInfo{
+  name:string;
+  profilePicture:string;
+}
+
+interface ProfessionalInfo{
+  specialization:string
+}
+
+// interface financialInfo{
+//   consultationFees:{
+//     online:number;
+//     offline:number
+//   }
+// }
+
+
+interface Clinic{
+  name:string;
+  address:[]
+}
+
+
+
 const BookingPage: React.FC = () => {
   const { id: docId } = useParams();
-  const doctorId=useSelector((state:RootState)=>state.doctor.doctorInfo?.docId)
+  // const doctorId=useSelector((state:RootState)=>state.doctor.doctorInfo?.docId)
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user?._id);
   console.log("user id", user);
@@ -46,31 +83,38 @@ const BookingPage: React.FC = () => {
 
   //added states
   // const [timeSlots, setTimeSlots] = useState([]);
-  const [selectedTime, setSelectedTime] = useState<string>("");
-  const [selectedDate1, setSelectedDate1] = useState(new Date());
-  const [visitType, setVisitType] = useState<string>("offline");
-  const [docProfile, setDocProfile] = useState(null);
+  const [selectedTime, ] = useState<string>("");
+  // const [selectedDate1, setSelectedDate1] = useState(new Date());
+  const [visitType, ] = useState<string>("offline");
+  const [, setDocProfile] = useState(null);
 
-  const [personalInfo, setPersonalInfo] = useState({});
-  const [financialInfo, setFinancialInfo] = useState({});
-  const [professionalInfo, setProfessionalInfo] = useState({});
-  const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo |null>({
+    name: '',
+    profilePicture: '',
+  });
+  const [financialInfo, setFinancialInfo] = useState<Finance | null>({
+    consultationFees: {} // Default value for consultationFees
+  });
+  const [professionalInfo, setProfessionalInfo] = useState<ProfessionalInfo| null>({
+    specialization:""
+  });
+  const [, setTimeSlots] = useState<string[]>([]);
   const [morningSlots, setMorningSlots] = useState<string[]>([]);
-  const [afternoonSlots, setAfternoonSlots] = useState<string[]>([]);
+  const [, setAfternoonSlots] = useState<string[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [clinicDetails, setClinicDetails] = useState({});
-  const [consultationMode,setConsultationMode]=useState('')
+  const [clinicDetails, setClinicDetails] = useState<Clinic|null>({
+    name:"",
+    address:[]
+  });
+  const [consultationMode, setConsultationMode] = useState("");
 
   //add remove
-
-
 
   //useeffect
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Optional delay (can be removed if unnecessary)
-      
 
         console.log("Fetching profile for doctor ID:", docId);
 
@@ -115,15 +159,15 @@ const BookingPage: React.FC = () => {
 
   const fetchTimeSlot = async (date: Date) => {
     if (!date || !docId) return;
-  
+
     console.log("Selected Consultation Mode:", consultationMode);
-  
+
     try {
       const formattedDate = date.toLocaleDateString("en-CA");
       console.log("Formatted Date:", formattedDate);
-  
+
       let response;
-  
+
       // Fetch slots based on consultation mode
       if (consultationMode === "online") {
         response = await AxiosInstance.get(
@@ -134,49 +178,50 @@ const BookingPage: React.FC = () => {
           `/user/offline-slots?id=${docId}&date=${formattedDate}`
         );
       }
-  
+
       if (!response || !response.data.slots) {
         throw new Error("No slots available");
       }
-  
+
       console.log("Fetched Time Slots:", response.data.slots);
-  
+
       // Categorize slots into morning and afternoon
       const morning: string[] = [];
       const afternoon: string[] = [];
-  
-      response.data.slots.forEach((slot: { startTime: string; status: string }) => {
-        const [hour] = slot.startTime.split(":").map(Number); // Split and convert to number
-  
-        if (slot.status === "available") {
-          if (slot.startTime) {
-            morning.push(slot.startTime); // Afternoon slots (12 PM onwards)
-          } else {
-            morning.push(slot.startTime); // Morning slots (before 12 PM)
+
+      response.data.slots.forEach(
+        (slot: { startTime: string; status: string }) => {
+          const [hour] = slot.startTime.split(":").map(Number); // Split and convert to number
+          console.log('hour',hour)
+
+          if (slot.status === "available") {
+            if (slot.startTime) {
+              morning.push(slot.startTime); // Afternoon slots (12 PM onwards)
+            } else {
+              morning.push(slot.startTime); // Morning slots (before 12 PM)
+            }
           }
+          console.log("mornnig slots", morning);
+          console.log("afternoon slots", afternoon);
         }
-        console.log('mornnig slots',morning)
-        console.log('afternoon slots',afternoon)
-      });
-  
+      );
+
       // Update the states
       setTimeSlots(response.data.slots || []);
       setMorningSlots(morning);
       setAfternoonSlots(afternoon);
-  
+
       console.log("Morning Slots:", morning);
       console.log("Afternoon Slots:", afternoon);
     } catch (error) {
       console.error("Error fetching time slots:", error);
-  
+
       // Reset the states in case of error
       setTimeSlots([]);
       setMorningSlots([]);
       setAfternoonSlots([]);
     }
   };
-  
-  
 
   useEffect(() => {
     console.log("ssssssssssssss", selectedDate);
@@ -232,8 +277,6 @@ const BookingPage: React.FC = () => {
   //   "4:30 PM",
   // ];
 
-
-
   // Doctor Info object remains the same
   const doctorInfo = {
     name: "Dr. Mohammed Nifli",
@@ -253,22 +296,27 @@ const BookingPage: React.FC = () => {
     specializations: ["Cardiology", "Internal Medicine", "Critical Care"],
   };
 
-  const handleClick = async () => {
-    try {
-      console.log("date", selectedDate);
-      console.log("slected", selectedSlot);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleClick = async () => {
+  //   try {
+  //     console.log("date", selectedDate);
+  //     console.log("slected", selectedSlot);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleSave = async () => {
-    let money = 0;
-    console.log("slooooooooot",selectedSlot)
+    let money:number =0;
+    let link;
+    console.log("visisiisis",visitType)
+   
+    console.log("slooooooooot", selectedSlot);
     if (consultationMode === "online") {
-      money = financialInfo?.consultationFees?.online;
+      money = financialInfo?.consultationFees?.online ??0;
+      link=uniqueId
     } else {
-      money = financialInfo?.consultationFees?.offline;
+      money = financialInfo?.consultationFees?.offline ??0;
+      link="";
     }
     console.log("money", money);
 
@@ -278,11 +326,13 @@ const BookingPage: React.FC = () => {
       patientId: "",
       appointmentDate: selectedDate,
       timeSlot: selectedSlot,
-      consultationMode: visitType,
+      consultationMode: consultationMode,
       amount: money,
+      videoCall:link
     };
 
     try {
+      console.log('appoop',appointmentData)
       const response = await axios.post(
         "http://localhost:4444/appointment/add",
         { appointmentData },
@@ -294,16 +344,21 @@ const BookingPage: React.FC = () => {
 
       if (response.status === 201) {
         // Assuming a successful booking
-    
-   const appointmentDate=response.data.appointment?.appointmentDate;
-   const time=response.data.appointment.timeSlot;
-      console.log("date of the appointment",appointmentDate,time)
-      const respo=await axiosInstance.post(`/user/slot-status`,{docId,appointmentDate,time})
-      console.log('respo',respo)
+
+        const appointmentDate = response.data.appointment?.appointmentDate;
+        const time = response.data.appointment.timeSlot;
+        console.log("date of the appointment", appointmentDate, time);
+        const respo = await axiosInstance.post(`/user/slot-status`, {
+          docId,
+          appointmentDate,
+          time,
+        });
+        console.log("respo", respo);
         toast.success("Appointment booked successfully!");
-        
+
         navigate("/patient", { state: { Id: response.data.appointment._id } });
-      }
+    
+    }
     } catch (error) {
       // Checking if the error is an AxiosError and the status code is 409
       if (axios.isAxiosError(error)) {
@@ -317,6 +372,25 @@ const BookingPage: React.FC = () => {
         console.error("Unexpected error:", error);
         toast.error("An unexpected error occurred");
       }
+    }
+  };
+
+  const handleChat = async (doctorId: string | undefined) => {
+    const userStatus = await axiosInstance.get(
+      `/user/premium-status?id=${user}`
+    );
+    console.log("userstatus", doctorId);
+    const premiumStatus = userStatus?.data?.premiumStatus?.isPremium;
+    if (premiumStatus === true) {
+      navigate('/chat', { 
+        state: { 
+          userId: user,
+        
+          docId: docId // 
+        } 
+      });
+    } else {
+      navigate("/premium");
     }
   };
 
@@ -432,7 +506,7 @@ const BookingPage: React.FC = () => {
               {/* Doctor Image */}
               <div className="w-48 h-48 rounded-xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex-shrink-0 shadow-lg">
                 <img
-                  src={personalInfo.profilePicture}
+                  src={personalInfo?.profilePicture}
                   alt="Dr. Mohammed Nifli"
                   className="w-full h-full object-cover"
                 />
@@ -446,12 +520,12 @@ const BookingPage: React.FC = () => {
                   </h1>
                   <div className="flex flex-wrap items-center gap-2">
                     {/* {doctorInfo.credentials.map((credential, index) => ( */}
-                      <span
-                        // key={index}
-                        className="px-3 py-1.5 bg-blue-500/20 rounded-full text-sm text-blue-200 font-medium"
-                      >
-                        {professionalInfo.specialization}
-                      </span>
+                    <span
+                      // key={index}
+                      className="px-3 py-1.5 bg-blue-500/20 rounded-full text-sm text-blue-200 font-medium"
+                    >
+                      {professionalInfo?.specialization}
+                    </span>
                     {/* ))} */}
                   </div>
                 </div>
@@ -470,7 +544,9 @@ const BookingPage: React.FC = () => {
 
                 <div className="flex items-center gap-2 text-gray-300">
                   <MapPin className="w-5 h-5" />
-                  <span className="text-lg">{clinicDetails.name}, {clinicDetails.address}</span>
+                  <span className="text-lg">
+                    {clinicDetails?.name}, {clinicDetails?.address}
+                  </span>
                 </div>
 
                 <div className="flex flex-wrap gap-3 mt-4">
@@ -479,7 +555,7 @@ const BookingPage: React.FC = () => {
                     // key={index}
                     className="px-4 py-2 bg-white/10 rounded-full text-sm text-white font-medium"
                   >
-                    {professionalInfo.specialization}
+                    {professionalInfo?.specialization}
                   </span>
                   {/* ))} */}
                 </div>
@@ -494,9 +570,16 @@ const BookingPage: React.FC = () => {
                   <Calendar className="w-5 h-5" />
                   Book Appointment
                 </button>
-                <button className="px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-emerald-500/25 flex items-center justify-center gap-2">
+                <button className="px-6 py-3.5 bg-neutral-500 hover:bg-neutral-600 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-emerald-500/25 flex items-center justify-center gap-2">
                   <MessageSquare className="w-5 h-5" />
                   View Reviews
+                </button>
+                <button
+                  onClick={() => handleChat(docId)}
+                  className="px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-emerald-500/25 flex items-center justify-center gap-2"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Chat
                 </button>
               </div>
             </div>
@@ -543,9 +626,10 @@ const BookingPage: React.FC = () => {
               {/* Online/Offline Selection */}
               <div className="flex justify-center gap-4 mt-6">
                 <button
-                  onClick={() => {setConsultationMode("online")
-                    fetchTimeSlot(selectedDate)}
-                  }
+                  onClick={() => {
+                    setConsultationMode("online");
+                    fetchTimeSlot(selectedDate);
+                  }}
                   className={`px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
                     consultationMode === "online"
                       ? "bg-green-500 text-white shadow-lg shadow-green-500/25"
@@ -555,8 +639,9 @@ const BookingPage: React.FC = () => {
                   Online
                 </button>
                 <button
-                  onClick={() =>{ setConsultationMode("offline");
-                    fetchTimeSlot(selectedDate)
+                  onClick={() => {
+                    setConsultationMode("offline");
+                    fetchTimeSlot(selectedDate);
                   }}
                   className={`px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
                     consultationMode === "offline"
@@ -577,7 +662,7 @@ const BookingPage: React.FC = () => {
                 <div className="bg-white rounded-xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.12)] transition-shadow duration-200">
                   <h3 className="text-lg font-medium text-gray-700 flex items-center gap-2 mb-4">
                     <Clock className="w-5 h-5 text-blue-500" />
-                     Slots
+                    Slots
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {morningSlots.length > 0 ? (
@@ -643,7 +728,7 @@ const BookingPage: React.FC = () => {
                         Consultation Fee
                       </h4>
                       <p className="text-white text-lg font-semibold">
-                        {financialInfo.consultationFees?.offline}
+                        {financialInfo?.consultationFees?.offline}
                       </p>
                     </div>
 
@@ -661,11 +746,11 @@ const BookingPage: React.FC = () => {
                       <ul className="text-gray-200 space-y-2">
                         <li className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                          Name: {clinicDetails.name}
+                          Name: {clinicDetails?.name}
                         </li>
                         <li className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                          place: {clinicDetails.address}
+                          place: {clinicDetails?.address}
                         </li>
                         {/* <li className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
@@ -691,3 +776,7 @@ const BookingPage: React.FC = () => {
 };
 
 export default BookingPage;
+// function uuidv4(): string {
+//   throw new Error("Function not implemented.");
+// }
+

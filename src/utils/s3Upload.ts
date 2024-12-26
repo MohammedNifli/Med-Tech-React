@@ -1,5 +1,5 @@
 
-export  const uploadFileToS3 = async (url:unknown, file:unknown) => {
+export  const uploadFileToS3 = async (url:string |URL, file:File) => {
     console.log("Uploading to S3...");
     
     try {

@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+// import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+interface Patient{
+  name:string;
+  phone:string;
+  email:string
+}
 
 const Consult: React.FC = () => {
   const navigate=useNavigate()
@@ -12,8 +18,11 @@ const Consult: React.FC = () => {
 
   
  const[patientName,setPatientName]=useState('')
-  const [patientDetails,setPatientDetails]=useState('');
+  const [patientDetails,setPatientDetails]=useState<Patient |undefined>();
   const [amount,setAmount]=useState(0)
+
+  const [,setPhoneNumber]=useState<string|''>('')
+  const [,setEmail]=useState<string|''>('')
   
 
 //   const handleSubmit = async (event: React.FormEvent) => {

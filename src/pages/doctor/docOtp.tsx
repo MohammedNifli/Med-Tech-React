@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import OTPComponent from "../../components/reusable/otpCompnent";
 import React, { useEffect } from "react";
 import { doctorOTPFunc, doctorResendOTP } from "../../services/doctorServices";
-import axiosInstance from "@/utils/axiosClient";
+
 import axios from "axios";
 
 

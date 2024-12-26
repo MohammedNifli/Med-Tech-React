@@ -1,13 +1,17 @@
 import React from "react";
 import { IoIosCloseCircle } from "react-icons/io";
 
-const PopUp: React.FC<{
+interface PopUpProps {
   isOpen: boolean;
   onClose: () => void;
   filterOptions: string[];
-  activeFilter: string | null; // Accept active filter prop
-  dropdownContent: { [key: string]: string[] }; // Accept dropdown content prop
-}> = (props) => {
+  activeFilter: string | null;
+  dropdownContent: { [key: string]: string[] };
+  onSelectOption: (filter: string, option: string) => void; // Add this line
+  onFilterSelect: (item: string) => void; // Add this line
+}
+
+const PopUp: React.FC<PopUpProps> = (props) => {
   return props.isOpen ? (
     <div
       className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
@@ -40,15 +44,19 @@ const PopUp: React.FC<{
           </div>
           <div className="bg-green-800 w-full h-full p-4 text-white rounded-lg ml-4">
             <h3 className="font-bold">{props.activeFilter}</h3>
-            {props.activeFilter && props.dropdownContent[props.activeFilter]?.map((option) => (
-              <button
-                key={option}
-                onClick={() => props.onSelectOption(props.activeFilter, option)} // Handle option select
-                className="block w-full text-left px-4 py-2 text-gray-200 hover:bg-green-700"
-              >
-                {option}
-              </button>
-            ))}
+            {props.activeFilter && props.activeFilter !== null &&
+          props.dropdownContent[props.activeFilter]?.map((option) => (
+            <button
+              key={option}
+              onClick={() =>
+                props.onSelectOption(props.activeFilter || '', option)
+              }
+              className="block w-full text-left px-4 py-2 text-gray-200 hover:bg-green-700"
+            >
+              {option}
+            </button>
+          ))
+        }
           </div>
         </div>
       </div>

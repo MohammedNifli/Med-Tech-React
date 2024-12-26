@@ -20,7 +20,7 @@ const PaymentSuccessfulPage: React.FC = () => {
           <div>
             <p className="text-xl font-medium mb-4">Thank you for your purchase!</p>
             <p className="text-gray-600 mb-8">
-              Your payment was processed successfully. We've sent a confirmation email with the details of your order.
+              Your payment was processed successfully. We&apos;ve sent a confirmation email with the details of your order.
             </p>
             <div className="flex justify-end">
               <button onClick={handelViewappointments} className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded mr-2">

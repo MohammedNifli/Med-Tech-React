@@ -27,7 +27,7 @@ import {
 import { fetchingProfileDetaills, updateUserProfile } from "../services/userServices";
 import axiosInstance from "../utils/axiosClient";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { profile } from "console";
+
 import axios from "axios";
 import {uploadFileToS3} from '../utils/s3Upload'
 

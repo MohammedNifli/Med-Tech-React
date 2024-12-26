@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
+
 import { loginDoctorSuccess, logoutDoctor } from '../../slices/doctorSlice';
 import ReusableLogin from '../../components/reusable/ReusableLogin';
 import { toast } from 'react-toastify';
@@ -13,8 +13,11 @@ const DocLogin: React.FC = () => {
 
   const handleSubmit = async (email: string, password: string) => {
     try {
+    
+
         const response = await doctorLogin(email, password);
-        console.log("Response:", response);
+    
+        console.log("Response:", "wow");
 
         if (response.status === 201) {
             const { id, name, specialization, refreshToken, accessToken, isBlocked } = response.data;
@@ -43,9 +46,11 @@ const DocLogin: React.FC = () => {
                     isBlocked,
                 })
             );
+            console.log("prrrrrrrrrrrrrrr")
+            navigate('/doctor/home');
 
             toast.success('Logged in successfully!');
-            navigate('/doctor/approval');
+           
         } else if (response.status === 400) {
             toast.error('Invalid credentials, please try again.');
         }

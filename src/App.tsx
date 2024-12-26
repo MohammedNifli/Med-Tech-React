@@ -9,10 +9,11 @@ import doctorRoutes from './routes/doctorRoutes';
 import adminRoutes from './routes/adminRoute';
 import PrivateRoute from './components/privateRoute'; 
 import DocPrivateRoute from './components/docPrivateRoute';
-import IsAuthenticatedRoute from '../src/components/IsAuthenticatedRoute';
+// import IsAuthenticatedRoute from '../src/components/IsAuthenticatedRoute';
 import UserLogin from './pages/user/Login';  // Import User Login Component
 import DoctorLogin from './pages/doctor/docLogin'; // Import Doctor Login Component
 import AdminLogin from './pages/adminPages/AdminLogin'; // Import Admin Login Component
+
 
 
 

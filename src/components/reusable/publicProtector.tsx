@@ -1,8 +1,9 @@
 // src/components/PrivateRoute.tsx
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../reduxStore/store'; // Adjust based on your store file location
+import { RootState } from '@/reduxStore/store';
+
 
 interface PrivateRouteProps {
   children: React.ReactNode;

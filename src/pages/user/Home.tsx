@@ -1,79 +1,81 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { TiTick } from "react-icons/ti";
+import React from "react";
 
-interface SpecialtyInfo {
-  description: string;
-  image: string;
-}
+// import { TiTick } from "react-icons/ti";
 
-// Update the Specialty type to match how you're using it
-type Specialty = {
-  name: string; // Changed from string[] to string as it seems you're using single strings for names
-};
+import { Heart, Eye, Baby, Smile, Clock, MessageCircle, Shield } from "lucide-react";
 
+// interface SpecialtyInfo {
+//   description: string;
+//   image: string;
+// }
+
+// interface Specialty {
+//   name: string;
+//   description: string;
+//   image: string;
+// }
 // Define the structure for the entire specialties data object
-const specialtiesData: Record<string, SpecialtyInfo> = {
-  Cardiology: {
-    description: "Specializing in diagnosis and treatment of heart diseases.",
-    image: "pictures/cardiology.jpg",
-  },
-  Neurology: {
-    description: "Focusing on disorders of the nervous system.",
-    image: "pictures/ped.jpg",
-  },
-  Pediatrics: {
-    description:
-      "Providing medical care for infants, children, and adolescents.",
-    image: "pictures/ped.jpg", // You'll need to provide the correct image path
-  },
-  Orthopedics: {
-    description:
-      "Dealing with conditions involving the musculoskeletal system.",
-    image: "pictures/cardiology.jpg", // You'll need to provide the correct image path
-  },
-  Dermatology: {
-    description:
-      "Specializing in conditions and diseases of the skin, nails, and hair.",
-    image: "pictures/dermatology.jpg", // You'll need to provide the correct image path
-  },
-};
+// const specialtiesData: Record<string, SpecialtyInfo> = {
+//   Cardiology: {
+//     description: "Specializing in diagnosis and treatment of heart diseases.",
+//     image: "pictures/cardiology.jpg",
+//   },
+//   Neurology: {
+//     description: "Focusing on disorders of the nervous system.",
+//     image: "pictures/neurology.jpg",
+//   },
+//   Pediatrics: {
+//     description:
+//       "Providing medical care for infants, children, and adolescents.",
+//     image: "pictures/ped.jpg",
+//   },
+//   Orthopedics: {
+//     description:
+//       "Dealing with conditions involving the musculoskeletal system.",
+//     image: "pictures/orthopedics.jpg",
+//   },
+//   Dermatology: {
+//     description:
+//       "Specializing in conditions and diseases of the skin, nails, and hair.",
+//     image: "pictures/dermatology.jpg",
+//   },
+// };
 
 const Home: React.FC = () => {
-  const [specialties, setSpecialties] = useState<Specialty[]>([]);
+  // const [specialties, setSpecialties] = useState([]);
 
-  useEffect(() => {
-    const fetchSpecialties = async () => {
-      try {
-        console.log("Fetching specialties...");
-        const response = await axios.get<{ specializations: Specialty[] }>(
-          "http://localhost:4444/user/specializations"
-        );
-        console.log("Response received:", response.data.specializations); // Access the data properly
-        setSpecialties(response.data.specializations); // Set the correct field to the state
-      } catch (error: any) {
-        if (error.response) {
-          console.error(
-            "Error response from server:",
-            error.response.status,
-            error.response.data
-          );
-        } else if (error.request) {
-          console.error("No response received:", error.request);
-        } else {
-          console.error("Error setting up the request:", error.message);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchSpecialties = async () => {
+  //     try {
+  //       console.log("Fetching specialties...");
+  //       const response = await axios.get<{ specializations: Specialty[] }>(
+  //         "http://localhost:4444/user/specializations"
+  //       );
+  //       console.log("Response received:", response.data.specializations); // Access the data properly
+  //       setSpecialties(response.data.specializations); // Set the correct field to the state
+  //     } catch (error: any) {
+  //       if (error.response) {
+  //         console.error(
+  //           "Error response from server:",
+  //           error.response.status,
+  //           error.response.data
+  //         );
+  //       } else if (error.request) {
+  //         console.error("No response received:", error.request);
+  //       } else {
+  //         console.error("Error setting up the request:", error.message);
+  //       }
+  //     }
+  //   };
 
-    fetchSpecialties();
-  }, []);
+  //   fetchSpecialties();
+  // }, []);
 
   return (
     <section className="bg-white py-8 mt-16 sm:mt-24">
-      <div className="container mx-auto px-4 border">
+      <div className="container mx-auto px-4 ">
         {/* Search Container */}
-        <div className="max-w-4xl mx-auto mb-8 sm:mb-12">
+        {/* <div className="max-w-4xl mx-auto mb-8 sm:mb-12">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="w-full sm:w-1/3">
               <input
@@ -90,7 +92,7 @@ const Home: React.FC = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Banner Container */}
         <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-xl overflow-hidden shadow-lg mb-8 sm:mb-12">
@@ -280,93 +282,261 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row w-full bg-white mt-4 rounded-lg shadow-lg border">
-          {/* Left Content Section */}
-          <div className="w-full md:w-1/2 h-auto p-4 flex flex-col">
-            <h2 className="text-2xl font-bold text-gray-800 mb-3 leading-tight">
-              Different Types Of Department
-              <br />
-              To Service For Your Health
-            </h2>
-            <p className="text-gray-600 mb-3 text-sm">
-              In terms of patient demand, we have different sorts of departments
-              to serve the best treatment in the city.
+        <div className="flex flex-col md:flex-row w-full bg-white mt-6 rounded-lg shadow-lg border">
+      {/* Left Content Section */}
+      <div className="w-full md:w-1/2 h-auto p-8 flex flex-col">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
+          Different Types Of Department
+          <br />
+          To Service For Your Health
+        </h2>
+        <p className="text-gray-600 mb-6 text-base leading-relaxed">
+          In terms of patient demand, we have different sorts of departments
+          to serve the best treatment in the city.
+        </p>
+        <a
+          href="#"
+          className="text-blue-600 hover:text-blue-700 font-semibold text-sm mb-10"
+        >
+          Read More
+        </a>
+
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Cardiology Card */}
+          <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:bg-purple-600 group">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-blue-50 group-hover:bg-white/20">
+              <Heart
+                className="text-blue-500 group-hover:text-white"
+                size={28}
+              />
+            </div>
+            <h3 className="text-xl font-bold mb-3 group-hover:text-white transition-colors">
+              Cardiology
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed group-hover:text-white/90 transition-colors">
+              Specialized care for heart conditions, including diagnostic
+              testing, treatment, and prevention of cardiovascular diseases.
             </p>
-            <a
-              href="#"
-              className="text-blue-600 hover:underline font-medium text-sm"
-            >
-              Read More
-            </a>
-
-            {/* First Row of Boxes */}
-            <div className="flex flex-wrap gap-6 mt-6">
-              <div className="bg-black w-80 h-52 rounded-lg"></div>
-              <div className="bg-green-300 w-80 h-52 rounded-lg"></div>
-            </div>
-
-            {/* Second Row of Boxes */}
-            <div className="flex flex-wrap gap-6 mt-6">
-              <div className="bg-red-500 w-80 h-52 rounded-lg"></div>
-              <div className="bg-yellow-400 w-80 h-52 rounded-lg"></div>
-            </div>
           </div>
 
-          {/* Right Image Section */}
-          <div className="w-full md:w-1/2 h-auto relative p-4 flex justify-center items-center">
-            {/* Floating Card */}
-            <div className="bg-white shadow-lg rounded-lg w-64 h-64 absolute bottom-6 left-6 p-4">
-              <h1 className="font-sans font-semibold text-lg mb-2 ">
-                Available Doctors
-              </h1>
-              <h6 className="font-sans font-thin text-gray-400 mb-4">
-                Verified Doctors
-              </h6>
-
-              {/* Profile Section */}
-              <div className="flex items-center space-x-3">
-                <div className="rounded-full w-10 h-10 bg-black"></div>
-                <div>
-                  <p className="text-gray-800 text-sm font-medium">
-                    Dr. Tamara Dai
-                  </p>
-                  <p className="text-gray-500 text-xs">Cardiologist</p>
-                </div>
-              </div>
-
-              {/* Button */}
-              <button className="mt-4 px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700">
-                Select Doctor
-              </button>
+          {/* Pediatrics Card */}
+          <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:bg-purple-600 group">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-purple-500 group-hover:bg-white/20">
+              <Baby className="text-white" size={28} />
             </div>
+            <h3 className="text-xl font-bold mb-3 group-hover:text-white transition-colors">
+              Pediatrics
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed group-hover:text-white/90 transition-colors">
+              Comprehensive healthcare for children from birth through
+              adolescence, focusing on growth, development, and wellness.
+            </p>
+          </div>
 
-            {/* Main Image */}
-            <img
-              className="w-5/6 md:w-4/6 h-auto ml-60 object-cover rounded-lg"
-              src="/pictures/doctor-in-video.jpg"
-              alt="Doctor"
-            />
+          {/* Ophthalmology Card */}
+          <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:bg-purple-600 group">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-cyan-50 group-hover:bg-white/20">
+              <Eye
+                className="text-cyan-500 group-hover:text-white"
+                size={28}
+              />
+            </div>
+            <h3 className="text-xl font-bold mb-3 group-hover:text-white transition-colors">
+              Ophthalmology
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed group-hover:text-white/90 transition-colors">
+              Expert eye care services including diagnosis, treatment, and
+              surgery for various vision and eye health conditions.
+            </p>
+          </div>
+
+          {/* Dentistry Card */}
+          <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:bg-purple-600 group">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-yellow-50 group-hover:bg-white/20">
+              <Smile
+                className="text-yellow-500 group-hover:text-white"
+                size={28}
+              />
+            </div>
+            <h3 className="text-xl font-bold mb-3 group-hover:text-white transition-colors">
+              Dentistry
+            </h3>
+            <p className="text-gray-600 text-sm leading-relaxed group-hover:text-white/90 transition-colors">
+              Complete dental care services including preventive,
+              restorative, and cosmetic treatments for optimal oral health.
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="w-full sm:w-[90vw] md:w-[80vw] lg:w-[75vw] h-auto min-h-[15rem] sm:min-h-[16rem] md:min-h-[18rem] lg:min-h-[20rem] rounded-2xl bg-violet-500 relative -bottom-10 sm:-bottom-16 md:-bottom-20 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
-          <h1 className="font-medium text-white text-2xl sm:text-3xl md:text-4xl text-center leading-tight">
-            Connect Instantly with Doctors:
-            <br className="hidden sm:inline" /> Chat for Expert Health Advice
-            and Personalized Care Anytime
-          </h1>
-          <p className="text-white text-center mt-2 sm:mt-3 md:mt-4 text-sm sm:text-base">
-            Chat with doctors and gain valuable advice. You can chat with
-            verified doctors.
+      {/* Right Image Section */}
+      <div className="w-full md:w-1/2 h-auto relative p-8 flex justify-center items-center">
+        {/* Floating Card */}
+        <div className="bg-white shadow-lg rounded-xl w-72 absolute bottom-12 left-12 p-6">
+          <h3 className="text-xl font-bold text-gray-900 mb-2">
+            Available Doctors
+          </h3>
+          <p className="text-gray-500 text-sm mb-6">
+            Verified Doctors
           </p>
-          <button className="rounded hover:bg-green-700 bg-green-500 text-white font-bold h-8 sm:h-9 md:h-10 w-28 sm:w-32 mt-3 sm:mt-4 md:mt-5 text-sm sm:text-base">
-            Go Premium
+
+          {/* Profile Section */}
+          <div className="flex items-center space-x-4 mb-6">
+            <div className="rounded-full w-12 h-12 bg-gray-900"></div>
+            <div>
+              <p className="text-gray-900 text-base font-semibold">
+                Dr. Tamara Dai
+              </p>
+              <p className="text-gray-500 text-sm">Cardiologist</p>
+            </div>
+          </div>
+
+          {/* Button */}
+          <button className="w-full px-4 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors">
+            Select Doctor
           </button>
         </div>
+
+        {/* Main Image */}
+        <img
+          className="w-4/5 h-auto ml-auto object-cover rounded-lg shadow-lg"
+          src="/pictures/doctor-in-video.jpg"
+          alt="Doctor consulting patient"
+        />
+      </div>
+    </div>
+
+   
+    <div className="bg-white w-full mt-8 rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+      <div className="flex flex-col md:flex-row min-h-[600px]">
+        {/* Left side - Image Container */}
+        <div className="md:w-[520px] h-[600px] relative bg-gray-100">
+          <img
+            src="/pictures/feedback.jpg"
+            alt="Medical professional"
+            className="w-full h-full object-cover"
+          />
+          {/* Doctor info overlay */}
+          <div className="absolute bottom-8 left-8 flex items-center bg-white rounded-xl p-4 shadow-lg transform transition-transform hover:scale-105">
+            <img
+              src="/"
+              alt="Dr. Tamara Dai"
+              className="w-14 h-14 rounded-xl object-cover"
+            />
+            <div className="ml-4">
+              <h4 className="font-semibold text-base text-gray-900">Dr. Tamara Dai</h4>
+              <p className="text-gray-600 text-sm">Cardiologist</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right side - Content */}
+        <div className="flex-1 p-12 lg:p-16 flex flex-col justify-center">
+          <div className="max-w-2xl">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight">
+              What They Say About{" "}
+              <span className="text-cyan-500">Med-Tech</span>
+            </h2>
+            <p className="text-gray-600 text-base mb-10 leading-relaxed">
+              Most of our users give us feedback regarding our services. 
+              You can see their comments below
+            </p>
+
+            {/* Rating */}
+            <div className="flex items-center mb-8">
+              <div className="flex text-yellow-400 text-2xl space-x-1">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="transform hover:scale-110 transition-transform">★</span>
+                ))}
+              </div>
+              <span className="ml-3 text-2xl font-bold text-gray-900">4.8</span>
+              <span className="ml-2 text-gray-500 text-sm">/5.0</span>
+            </div>
+
+            {/* Testimonial */}
+            <div className="relative">
+              <div className="absolute -left-4 -top-4 text-6xl text-cyan-500 opacity-20">&quot;</div>
+              <blockquote className="text-gray-700 italic text-xl leading-relaxed mb-8 relative z-10">
+                You won&apos;t regret it. I love it. I didn&apos;t even need training. 
+                I will let my mum know about this, she could really make use of it!
+              </blockquote>
+            </div>
+
+            <div className="flex items-center">
+              <div>
+                <p className="font-semibold text-gray-900 text-lg">Yolanda Tamara</p>
+                <p className="text-gray-500 text-sm">Olivia Pope & Associates</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+       
+
+  
+
+    <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[80%] relative -bottom-8 sm:-bottom-12 md:-bottom-16 left-1/2 transform -translate-x-1/2">
+      <div className="min-h-[24rem] rounded-2xl bg-gradient-to-br from-violet-500 to-violet-600 shadow-lg overflow-hidden relative">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-white/5 backdrop-blur-3xl">
+          <div className="absolute top-0 left-0 w-48 h-48 bg-violet-400/20 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-48 h-48 bg-violet-400/20 rounded-full translate-x-1/2 translate-y-1/2"></div>
+        </div>
+
+        {/* Content Container */}
+        <div className="relative flex flex-col items-center justify-center p-6 md:p-8 lg:p-12 text-center">
+          {/* Main Heading */}
+          <h1 className="font-bold text-white text-2xl sm:text-3xl md:text-4xl max-w-3xl leading-tight">
+            Connect Instantly with Doctors
+            <span className="block mt-2">Chat for Expert Health Advice</span>
+          </h1>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 mb-6 w-full max-w-2xl">
+            <div className="flex flex-col items-center text-white">
+              <div className="bg-white/20 p-2 rounded-full mb-2">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <p className="text-sm">24/7 Doctor Access</p>
+            </div>
+            <div className="flex flex-col items-center text-white">
+              <div className="bg-white/20 p-2 rounded-full mb-2">
+                <Shield className="w-5 h-5" />
+              </div>
+              <p className="text-sm">Verified Specialists</p>
+            </div>
+            <div className="flex flex-col items-center text-white">
+              <div className="bg-white/20 p-2 rounded-full mb-2">
+                <Clock className="w-5 h-5" />
+              </div>
+              <p className="text-sm">Quick Response Time</p>
+            </div>
+          </div>
+
+          {/* Description */}
+          <p className="text-white/90 text-sm md:text-base max-w-xl mb-6">
+            Get instant access to verified medical professionals for personalized health advice 
+            and consultation, anytime and anywhere.
+          </p>
+
+          {/* CTA Button */}
+          <button className="bg-white text-violet-600 hover:bg-violet-50 transition-colors 
+            duration-200 font-semibold px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg">
+            Upgrade to Premium
+          </button>
+
+          {/* Badge */}
+          <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full">
+            <span className="text-white text-xs font-medium">Limited Time Offer</span>
+          </div>
+        </div>
+      </div>
+    </div>
       </div>
     </section>
   );
 };
 
 export default Home;
- 

@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const PasswordModal = ({ isOpen, onClose, onSave }) => {
+interface PasswordModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (currentPassword: string, newPassword: string, confirmPassword: string) => void;
+}
+
+const PasswordModal:React.FC<PasswordModalProps> = ({ isOpen, onClose, onSave }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

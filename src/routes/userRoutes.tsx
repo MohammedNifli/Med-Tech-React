@@ -21,6 +21,11 @@ import PaymentList from '../pages/user/paymentPage'
 import OfflineConsultation from '../pages/user/OfflineConsultation';
 import ChatPage from '../pages/user/ChatPage';
 import BookingPage from '../pages/user/BookingPage';
+import GoPremium from '@/pages/user/GoPremium';
+import PremiumCheckout from '@/pages/user/PremiumCheckout';
+import PaymentSuccess from '../pages/user/premiumPaySuccess';
+// import FindDoctor from '../pages/user/findDoctor';
+import SearchPage from '@/pages/user/SearchPage';
 // import CheckoutForm from '../checkout';
 // import PaymentPage from '../pages/user/paymentPage';
 // Define a TypeScript interface for route configurations
@@ -53,6 +58,12 @@ const userRoutes: RouteConfig[] = [
   { path: '/offline-consultations', element: <OfflineConsultation/> , allowedRoles: ['user'] },
   { path: '/chat', element: <ChatPage/> , allowedRoles: ['user'] },
   { path: '/book/:id', element: <BookingPage/> ,private:true, allowedRoles: ['user'] },
+  { path: '/premium', element: <GoPremium/> ,private:true, allowedRoles: ['user'] },
+  { path: '/premium-checkout', element: <PremiumCheckout/> ,private:true, allowedRoles: ['user'] },
+  { path: '/user/success', element: <PaymentSuccess/> ,private:true, allowedRoles: ['user'] },
+  { path: '/find', element: <SearchPage/> ,private:true, allowedRoles: ['user'] },
+  
+  
 
 ];
 

@@ -78,7 +78,7 @@ const AppointmentListing: React.FC = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-semibold mb-4">Appointment Listings</h1>
-      <TableComponent<Appointment>
+      <TableComponent
         caption="Appointments"
         data={appointments}
         columns={columns}

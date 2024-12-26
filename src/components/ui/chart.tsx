@@ -1,10 +1,5 @@
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
-import {
-  NameType,
-  Payload,
-  ValueType,
-} from "recharts/types/component/DefaultTooltipContent"
 
 import { cn } from "@/lib/utils"
 
@@ -45,6 +40,7 @@ const ChartContainer = React.forwardRef<
       typeof RechartsPrimitive.ResponsiveContainer
     >["children"]
   }
+// eslint-disable-next-line react/prop-types
 >(({ id, className, children, config, ...props }, ref) => {
   const uniqueId = React.useId()
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
@@ -72,6 +68,7 @@ ChartContainer.displayName = "Chart"
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ([_, config]) => config.theme || config.color
   )
 
@@ -106,37 +103,40 @@ ${colorConfig
 const ChartTooltip = RechartsPrimitive.Tooltip
 
 const ChartTooltipContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-    React.ComponentProps<"div"> & {
-      hideLabel?: boolean
-      hideIndicator?: boolean
-      indicator?: "line" | "dot" | "dashed"
-      nameKey?: string
-      labelKey?: string
+HTMLDivElement,
+React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+React.ComponentProps<"div"> & {
+  hideLabel?: boolean;
+  hideIndicator?: boolean;
+  indicator?: "line" | "dot" | "dashed";
+  nameKey?: string;
+  labelKey?: string; // Add this line
+  active?: boolean;
+  
     }
 >(
   (
     {
       active,
+      // eslint-disable-next-line react/prop-types
       payload,
+      // eslint-disable-next-line react/prop-types
       className,
       indicator = "dot",
       hideLabel = false,
-      hideIndicator = false,
+      // eslint-disable-next-line react/prop-types
       label,
+      // eslint-disable-next-line react/prop-types
       labelFormatter,
+      // eslint-disable-next-line react/prop-types
       labelClassName,
-      formatter,
-      color,
-      nameKey,
-      labelKey,
-    },
+      labelKey    },
     ref
   ) => {
     const { config } = useChart()
 
     const tooltipLabel = React.useMemo(() => {
+      // eslint-disable-next-line react/prop-types
       if (hideLabel || !payload?.length) {
         return null
       }
@@ -172,10 +172,12 @@ const ChartTooltipContent = React.forwardRef<
       labelKey,
     ])
 
+    // eslint-disable-next-line react/prop-types
     if (!active || !payload?.length) {
       return null
     }
 
+    // eslint-disable-next-line react/prop-types
     const nestLabel = payload.length === 1 && indicator !== "dot"
 
     return (
@@ -188,7 +190,10 @@ const ChartTooltipContent = React.forwardRef<
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
-          {payload.map((item, index) => {
+          
+         
+          {/* // eslint-disable-next-line react/prop-types */}
+          {/* {payload.map((item, index) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
             const indicatorColor = color || item.payload.fill || item.color
@@ -251,7 +256,7 @@ const ChartTooltipContent = React.forwardRef<
                 )}
               </div>
             )
-          })}
+          })} */}
         </div>
       </div>
     )

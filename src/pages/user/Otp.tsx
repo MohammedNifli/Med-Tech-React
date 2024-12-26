@@ -1,12 +1,12 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 import OTPComponent from '../../components/reusable/otpCompnent';
 import { toast } from 'react-toastify';
 import { otpResend, verifyOtp } from '../../services/userServices';
 
 // User OTP Page
-export const UserOTPPage = () => {
+export const UserOTPPage:React.FC = () => {
   const location = useLocation();
   const email:string = location.state?.email || '';
   const navigate = useNavigate();

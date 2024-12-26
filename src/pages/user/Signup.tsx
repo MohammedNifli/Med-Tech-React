@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { GoogleLogin, GoogleCredentialResponse } from '@react-oauth/google';
+import {  GoogleCredentialResponse } from '@react-oauth/google';
 
 // Service imports
 import { userSignUp } from '../../services/userServices';
@@ -127,10 +127,13 @@ const Signup: React.FC = () => {
     }
   };
 
+  console.log('handleGoogleSuccess',handleGoogleSuccess)
+
   // Google OAuth Failure Handler
   const handleGoogleFailure = (): void => {
     toast.error('Google signup failed');
   };
+  console.log('handleGoogleFailure',handleGoogleFailure)
 
   // Submit Handler
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -152,6 +155,8 @@ const Signup: React.FC = () => {
         const otpResponse = await axios.post('http://localhost:4444/otp/send', { 
           email: formData.email 
         });
+
+        console.log('otper',otpResponse)
 
         // Create Wallet
         const userId = response.data.user?._id;
@@ -204,7 +209,7 @@ const Signup: React.FC = () => {
           {/* Right side - Sign Up Form */}
           <div className="w-full lg:w-1/2 p-4 sm:p-6 md:p-8 lg:p-10">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-navy-900 mb-2 text-center lg:text-left">
-              User's Sign up
+              User&apos;s Sign up
             </h1>
             <p className="text-sm sm:text-base text-gray-600 mb-6 text-center lg:text-left">
               Hey, enter your details to create your account

@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 // import Docdetails from '../../pages/user/Docdetails';
 
 // Import the SearchBar component
+// Inside serachBar.tsx, add this near the top of the file
+interface SearchBarProps {
+  specializations: string[];
+  onSearch: (city: string, locality: string, specialization: string) => void;
+}
 const SearchBar: React.FC<SearchBarProps> = ({ specializations, onSearch }) => {
   const [city, setCity] = useState('');
   const [locality, setLocality] = useState('');
@@ -117,11 +122,17 @@ const Demo: React.FC = () => {
         city: data.city || 'N/A',
         country: data.country_name || 'N/A',
         region: data.region || 'N/A',
+        // eslint-disable-next-line no-constant-binary-expression
         location: `${data.latitude}, ${data.longitude}` || 'N/A',
       });
-    } catch (error) {
-      console.error('Error fetching geolocation info:', error);
-      setError(error.message || 'Error fetching geolocation info. Please try again.');
+    } catch (error:unknown) {
+      let errorMessage = '';
+    if (error instanceof Error) {
+      errorMessage = error.message || 'Error fetching geolocation info. Please try again.';
+    } else {
+      errorMessage = 'An unexpected error occurred';
+    }
+    setError(errorMessage);
     } finally {
       setLoading(false);
     }

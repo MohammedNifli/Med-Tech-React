@@ -6,10 +6,13 @@ import { toast, ToastContainer } from "react-toastify";
 import Sidebar from "../../components/user/Sider";
 import { RootState } from "../../reduxStore/store";
 import {
-  fetchingAllOfflineAppointments,
   addFeedBackAndRating,
-  fetchFeedbackAndRating,
+  fetchedFeedbackAndRating,
+  fetchingAllOfflineAppointments
+  
+  
 } from "../../services/userServices";
+
 
 // Types
 interface Consultation {
@@ -61,7 +64,7 @@ const OfflineConsultation: React.FC = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [showViewModal, setShowViewModal] = useState(false);
-  const [viewFeedback, setViewFeedback] = useState<ViewFeedback | null>(null);
+const [viewFeedback, setViewFeedback] = useState<ViewFeedback | null>(null);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -75,7 +78,7 @@ const OfflineConsultation: React.FC = () => {
 
         const formattedAppointments = (
           fetchedAppointments?.data?.fetchAppointments || []
-        ).map((appointment) => ({
+        ).map((appointment: { appointmentDate: string; }) => ({
           ...appointment,
           appointmentDate: formatDate(appointment.appointmentDate), // Assuming formatDate is a function that formats the date
         }));
@@ -101,24 +104,36 @@ const OfflineConsultation: React.FC = () => {
     setRating(starValue);
   };
 
-  const handleViewFeedback = async (consultation: Consultation) => {
-    try {
-      // const response = await fetchFeedbackAndRating(consultation._id);
+ const handleViewFeedback = async (consultation: Consultation) => {
+     try {
+      //  setDocId(consultation.doctorId);
+      //  setPatientId(consultation.patientId);
+      //  setUserId(consultation.userId);
 
-      if (response.data) {
-        setViewFeedback({
-          rating: response.data.rating,
-          comment: response.data.comment,
-        });
-      } else {
-        toast.error("No feedback found");
-      }
-      setShowViewModal(true);
-    } catch (error) {
-      console.error("Error fetching feedback:", error);
-      toast.error("Failed to load feedback");
-    }
-  };
+      console.log('.............../////////',consultation.userId,
+        consultation.patientId,
+        consultation.doctorId)
+ 
+       const response = await fetchedFeedbackAndRating(
+         consultation.userId,
+         consultation.patientId,
+         consultation.doctorId
+       );
+ 
+       if (response.data?.fetchedFeedbackAndRating) {
+         setViewFeedback({
+           rating: response.data.fetchedFeedbackAndRating.rating || 0,
+           comment: response.data.fetchedFeedbackAndRating.feedback || "",
+         });
+         setShowViewModal(true);
+       } else {
+         toast.error("No feedback found");
+       }
+     } catch (error) {
+       console.error("Error fetching feedback:", error);
+       toast.error("Failed to load feedback");
+     }
+   };
 
   const handleSaveFeedback = async () => {
     if (!selectedConsultation) return;

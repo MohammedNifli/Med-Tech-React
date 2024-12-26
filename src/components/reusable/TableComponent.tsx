@@ -1,4 +1,3 @@
-// TableComponent.tsx
 import React, { memo } from "react";
 import {
   Table,
@@ -13,7 +12,13 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 
-export interface TableColumn<T> {
+// Base interface for items that must have an _id
+interface BaseItem {
+  _id: string;
+}
+
+// Updated TableColumn interface with better generic constraints
+export interface TableColumn<T extends BaseItem> {
   label: string;
   accessor?: keyof T | string;
   isAction?: boolean;
@@ -23,7 +28,7 @@ export interface TableColumn<T> {
   render?: (item: T) => React.ReactNode;
 }
 
-export interface TableComponentProps<T> {
+export interface TableComponentProps<T extends BaseItem> {
   caption: string;
   data: T[];
   columns: TableColumn<T>[];
@@ -31,42 +36,74 @@ export interface TableComponentProps<T> {
   isLoading?: boolean;
 }
 
-const getNestedValue = (obj: any, path: string): any => {
-  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+interface TableRowProps<T extends BaseItem> {
+  row: T;
+  index: number;
+  columns: TableColumn<T>[];
+}
+
+// Helper function
+const getNestedValue = <T,>(obj: T, path: string): unknown => {
+  return path.split(".").reduce((acc, key) => {
+    if (acc && typeof acc === "object" && key in acc) {
+      return (acc as Record<string, unknown>)[key];
+    }
+    return undefined;
+  }, obj as unknown);
 };
 
-const TableRow = memo(<T extends { _id: string }>({ 
-  row, 
-  index, 
-  columns 
-}: { 
-  row: T; 
-  index: number; 
-  columns: TableColumn<T>[];
-}) => (
-  <Tr>
-    <Td>{index + 1}</Td>
-    {columns.map((col, colIndex) => (
-      <Td key={colIndex}>
-        {col.render ? (
-          col.render(row)
-        ) : col.isAction && col.action ? (
-          <Button
-            colorScheme={col.actionColorScheme?.(row) || "blue"}
-            onClick={() => col.action?.(row._id)}
-            size="sm"
-          >
-            {col.actionLabel?.(row)}
-          </Button>
-        ) : col.accessor ? (
-          String(getNestedValue(row, col.accessor) || 'N/A')
-        ) : null}
-      </Td>
-    ))}
-  </Tr>
-));
+// Updated TableRow component with proper typing
+const TableRowComponent = <T extends BaseItem>({
+  row,
+  index,
+  columns,
+}: TableRowProps<T>) => {
+  const renderCellContent = (col: TableColumn<T>) => {
+    if (col.render) {
+      return col.render(row);
+    }
 
-const TableComponent = memo(<T extends { _id: string }>({
+    if (col.isAction && col.action) {
+      return (
+        <Button
+          colorScheme={col.actionColorScheme?.(row) || "blue"}
+          onClick={() => col.action?.(row._id)}
+          size="sm"
+        >
+          {col.actionLabel?.(row)}
+        </Button>
+      );
+    }
+
+    if (col.accessor) {
+      let value: unknown;
+      if (typeof col.accessor === "string" && col.accessor.includes(".")) {
+        value = getNestedValue(row, col.accessor);
+      } else if (typeof col.accessor === "string" || typeof col.accessor === "number") {
+        value = row[col.accessor as keyof T];
+      }
+
+      return value !== undefined ? String(value) : "N/A";
+    }
+
+    return null;
+  };
+
+  return (
+    <Tr>
+      <Td>{index + 1}</Td>
+      {columns.map((col, colIndex) => (
+        <Td key={colIndex}>{renderCellContent(col)}</Td>
+      ))}
+    </Tr>
+  );
+};
+
+const TableRow = memo(TableRowComponent) as typeof TableRowComponent;
+// TableRow.displayName = 'TableRow';
+
+// Updated TableComponent with proper typing
+const TableComponentBase = <T extends BaseItem>({
   caption,
   data,
   columns,
@@ -76,7 +113,7 @@ const TableComponent = memo(<T extends { _id: string }>({
   if (isLoading) {
     return (
       <div className="w-full h-64 flex justify-center items-center">
-        <Spinner 
+        <Spinner
           thickness="4px"
           speed="0.65s"
           emptyColor="gray.200"
@@ -102,8 +139,8 @@ const TableComponent = memo(<T extends { _id: string }>({
         <Tbody>
           {error ? (
             <Tr>
-              <Td 
-                colSpan={columns.length + 1} 
+              <Td
+                colSpan={columns.length + 1}
                 className="text-center text-red-500 font-medium"
               >
                 {error}
@@ -111,8 +148,8 @@ const TableComponent = memo(<T extends { _id: string }>({
             </Tr>
           ) : data.length === 0 ? (
             <Tr>
-              <Td 
-                colSpan={columns.length + 1} 
+              <Td
+                colSpan={columns.length + 1}
                 className="text-center text-gray-500 font-medium"
               >
                 No data available
@@ -132,9 +169,8 @@ const TableComponent = memo(<T extends { _id: string }>({
       </Table>
     </TableContainer>
   );
-});
+};
 
-TableRow.displayName = 'TableRow';
-TableComponent.displayName = 'TableComponent';
+const TableComponent = memo(TableComponentBase) as typeof TableComponentBase;
 
 export default TableComponent;

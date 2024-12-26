@@ -4,7 +4,7 @@ import { FaMale, FaFemale } from "react-icons/fa";
 import {
   CalendarIcon,
   HeartPulseIcon,
-  Key,
+  
   StethoscopeIcon,
   UserIcon,
 } from "lucide-react";
@@ -21,8 +21,17 @@ import axiosInstance from "@/utils/axiosClient";
 
 interface Doctor {
   doctorName: string;
-  specialization: string;
+  specialisation: string;
   Image?: string; // Optional property
+  rating:number;
+}
+
+
+interface DocDetails  {
+  Image: string;
+  doctorName: string;
+  specialization: string;
+  rating: number | string;
 }
 
 const DocDashboard: React.FC<{ doctors: Doctor[] }> = () => {
@@ -33,10 +42,10 @@ const DocDashboard: React.FC<{ doctors: Doctor[] }> = () => {
   const [otherDoctors, setOtherDoctors] = useState(0);
 
   //top-rated doctors array state
-  const [topRatedDoctors, setTopRatedDoctors] = useState([]);
+  const [topRatedDoctors, setTopRatedDoctors] = useState<Doctor[]>([]);
 
   //state for available doctors
-  const [availableDoctors, setAvailableDoctors] = useState([]);
+  const [availableDoctors, setAvailableDoctors] = useState<DocDetails[]>([]);
 
   // Doctor gender distribution data
   const doctorData = [
@@ -45,7 +54,7 @@ const DocDashboard: React.FC<{ doctors: Doctor[] }> = () => {
     { name: "Other", value: otherDoctors, color: "#FFA500" }, // Static value for "Other"
   ];
 
-  const COLORS = ["#3B82F6", "#EC4899", "#FFA500"]; // Ensure we have enough colors for all categories
+  // const COLORS = ["#3B82F6", "#EC4899", "#FFA500"]; // Ensure we have enough colors for all categories
 
   const handleNavigation = (tabName: string, url: string) => {
     setActiveTab(tabName);
@@ -96,9 +105,9 @@ const DocDashboard: React.FC<{ doctors: Doctor[] }> = () => {
   }, []);
 
   // Calculate the total count of doctors for percentage
-  const totalDoctorsCount = maleDoctors + femaleDoctors + 5; // Add "Other" category count
+  // const totalDoctorsCount = maleDoctors + femaleDoctors + 5; // Add "Other" category count
 
-  const renderCustomizedLabel = ({ name, value, percent }: any) => {
+  const renderCustomizedLabel = ({ name, value, percent }:{name:string,value:number,percent:number}) => {
     return `${name}: ${value} (${Math.round(percent * 100)}%)`; // Show count and percentage
   };
 

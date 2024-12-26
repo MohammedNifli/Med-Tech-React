@@ -13,7 +13,7 @@ interface Patient {
   createdAt: string;
 }
 
-const patientListing = () => {
+const patientListing:React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +30,7 @@ const patientListing = () => {
           setPatients(response.data.fetchAllPatients); // Assuming 'patients' is the key in the response
         } 
       } catch (err) {
+        console.log(err)
         setError('An error occurred while fetching patients.');
       } finally {
         setIsLoading(false);
@@ -73,10 +74,10 @@ const patientListing = () => {
   return (
     <div>
       
-      <TableComponent
+      <TableComponent<Patient>
         caption="Patient List"
         data={patients}
-        columns={columns}
+        columns={columns as TableColumn<Patient>[]}
         isLoading={isLoading}
         error={error}
       />

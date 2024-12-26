@@ -11,7 +11,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const WithdrawalModal = ({ 
+interface WithdrawalModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (amount: number) => void;
+  currentBalance?: number;
+}
+
+const WithdrawalModal:React.FC<WithdrawalModalProps> = ({ 
   isOpen, 
   onClose, 
   onConfirm, 

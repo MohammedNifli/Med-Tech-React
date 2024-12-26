@@ -115,7 +115,7 @@ const ReusableLogin: React.FC<LoginProps> = ({
           </form>
 
           <div className='text-center mt-6'>
-            <p className='text-sm text-gray-700'>Don't Have Any Account Yet? 
+            <p className='text-sm text-gray-700'>Don&apos;t Have Any Account Yet? 
               <a href={signUpLink} className='text-blue-500 font-semibold hover:underline'> Sign Up</a>
             </p>
           </div>

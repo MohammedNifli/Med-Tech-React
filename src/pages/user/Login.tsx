@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { GoogleLogin, GoogleCredentialResponse } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AnyAction } from '@reduxjs/toolkit';
 
 // Type imports
 import { ThunkDispatch } from 'redux-thunk';
@@ -51,9 +52,15 @@ interface GoogleOAuthResponse {
   message: string;
 }
 
+
+
+
+
+
+
 const Login: React.FC = () => {
   // Typed dispatch and navigate
-  const dispatch = useDispatch<ThunkDispatch<RootState, unknown, AuthActionTypes>>();
+  const dispatch = useDispatch<ThunkDispatch<RootState, unknown, AnyAction>>();
   const navigate = useNavigate();
 
   // State with explicit types

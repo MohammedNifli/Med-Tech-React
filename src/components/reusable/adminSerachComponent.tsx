@@ -9,8 +9,18 @@ interface SearchComponentProps {
 const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
     const [searchTerm, setSearchTerm] = useState('');
     useEffect(() => {
-      const { data, loading, error } = useFetchData("", searchTerm);
-    },[searchTerm])
+      const fetchData = async () => {
+        try {
+          const { data } = await useFetchData("", searchTerm);
+          // Do something with the data
+          console.log(data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+    
+      fetchData();
+    }, [searchTerm]);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       

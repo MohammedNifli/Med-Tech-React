@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import {
   CalendarIcon,
   HeartPulseIcon,
@@ -18,13 +18,30 @@ import {
 } from "recharts";
 import axiosInstance from "@/utils/axiosClient";
 
+interface Patient {
+  name: string;
+  gender: string;
+  age: number;
+  // Add other properties as needed
+}
+
+interface ITEM {
+  _id: string | { year: string | number; month?: string | number };
+  male: string;
+  female: string;
+  other: string;
+  year?: number | string;
+  month?: string | number;
+  day?: string | number;
+}
+
 const PatientDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("patients");
   const [interval, setInterval] = useState("yearly"); // Default interval
   const [chartData, setChartData] = useState([]); // Data for chart
   const [loading, setLoading] = useState(false); // Loading state
-  const [newPatient, setNewPatient] = useState<any[]>([]); // New patients data
+  const [newPatient, setNewPatient] = useState<Patient[]>([]); // New patients data
 
   // Fetch data from the backend based on selected interval
   useEffect(() => {
@@ -34,26 +51,27 @@ const PatientDashboard: React.FC = () => {
         const response = await axiosInstance.get(`/admin/dash-patients?period=${interval}`);
   
         // Process the response data to match the chart data format
-        const formattedData = response.data.data.map((item: any) => {
-          let name = '';
-          
+        const formattedData = response.data.data.map((item: ITEM) => {
+          let name = "";
+        
           // Conditionally format the name based on the interval
-          if (interval === 'yearly') {
+          if (interval === "yearly") {
             name = `${item._id}`;
-          } else if (interval === 'monthly') {
+          } else if (interval === "monthly" && typeof item._id === "object") {
             name = `${item._id.month}-${item._id.year}`;
-          } else if (interval === 'daily') {
+          } else if (interval === "daily" && typeof item._id === "object") {
             name = `${item.day}-${item.month}-${item.year}`;
           }
-  
+        
           // Format the chart data
           return {
-            name: name,
-            male: item.male,
-            female: item.female,
-            other: item.other,
+            name,
+            male: parseInt(item.male, 10), // Convert string to number if needed
+            female: parseInt(item.female, 10), // Convert string to number if needed
+            other: parseInt(item.other, 10), // Convert string to number if needed
           };
         });
+        
   
         setChartData(formattedData);
       } catch (error) {
@@ -169,7 +187,7 @@ const PatientDashboard: React.FC = () => {
                   <div key={index} className="flex items-center space-x-4">
                     <UserIcon className="text-gray-500 w-8 h-8" />
                     <div>
-                      <p className="font-semibold">{patient.name}</p>
+                      <p className="font-semibold">{patient?.name}</p>
                       <p className="text-gray-600">{patient.gender}</p>
                       <p className="text-gray-600">{patient.age} years old</p>
                     </div>

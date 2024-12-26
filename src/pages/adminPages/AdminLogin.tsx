@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
+
 import { loginAdminSuccess } from '../../slices/adminSlice';
 import ReusableLogin from '../../components/reusable/ReusableLogin';
 import { toast } from 'react-toastify'
@@ -30,7 +30,7 @@ const AdminLogin: React.FC = () => {
 
         // Prepare the admin info object
         const admin = {
-          admiId: _id,
+          id: _id,
           name,
           email,
         };
@@ -38,11 +38,11 @@ const AdminLogin: React.FC = () => {
         // Dispatch Redux action to update state
         dispatch(
           loginAdminSuccess({
-            isAuthenticated:false,
-            adminInfo: admin,
-            token: accessToken,
+              adminInfo: admin,
+              token: accessToken,
           })
-        );
+      );
+      
 
         // Display success toast message and navigate to admin page
         toast.success('Logged in successfully!');

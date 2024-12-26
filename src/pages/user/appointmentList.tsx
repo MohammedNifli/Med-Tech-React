@@ -5,12 +5,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reduxStore/store";
 import axiosInstance from "../../utils/axiosClient";
 import { MdModeStandby } from "react-icons/md";
-import { boolean } from "yup";
+
 import axios from "axios";
 
 interface Doctor {
   personalInfo: {
     name: string;
+    profilePicture:string;
   };
   professionalInfo: {
     profilePicture?: string;
@@ -24,18 +25,20 @@ interface Doctor {
 }
 
 interface appointment {
-  id: string;
+  _id: string;
   doctorDetails: Doctor;
   appointmentDate: string;
+  consultationMode:"online" | "offline";
   timeSlot: string;
-  status: "Confirmed" | "Pending" | "Cancelled";
+  status: 'pending' | 'confirmed' | 'cancelled';
+  amount:number;
   rating: number;
   comments: number;
 }
 
 const AppointmentList: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.user?._id);
-  const [appointments, setAppointments] = useState<appointment[]>([]);
+  // const [appointments, setAppointments] = useState<appointment[]>([]);
   const [upcomingAppointments, setUpcomingAppointments] = useState<
     appointment[]
   >([]);
@@ -179,9 +182,9 @@ const AppointmentList: React.FC = () => {
   <div className="flex items-center lg:justify-end gap-2 mb-4">
     <span
       className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-        appointment.status === "Confirmed"
+        appointment.status === "confirmed"
           ? "bg-green-100 text-green-700"
-          : appointment.status === "Cancelled"
+          : appointment.status === "cancelled"
           ? "bg-red-100 text-red-700"
           : "bg-yellow-100 text-yellow-700"
       }`}
@@ -355,12 +358,12 @@ const AppointmentList: React.FC = () => {
             {todaysAppointments.length > 0 && (
               <section className="mb-8">
                 <h2 className="text-lg font-semibold mb-4">
-                  Today's Appointments
+                  Today&apos;s Appointments
                 </h2>
                 <div className="space-y-4">
                   {todaysAppointments.map((appointment) => (
                     <AppointmentCard
-                      key={appointment.id}
+                      key={appointment._id}
                       appointment={appointment}
                       isPast={false}
                     />
@@ -392,7 +395,7 @@ const AppointmentList: React.FC = () => {
                 <div className="space-y-4">
                   {pastAppointments.map((appointment) => (
                     <AppointmentCard
-                      key={appointment.id}
+                      key={appointment._id}
                       appointment={appointment}
                       isPast={true}
                     />

@@ -5,7 +5,7 @@ import {
   Star,
   X,
   Clock,
-  Calendar,
+  
   User,
   PhoneCall,
 } from "lucide-react";
@@ -76,7 +76,7 @@ const OnlineConsultations: React.FC = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [showJoinModal, setShowJoinModal] = useState(false);
-  const [appointmentId, setAppointmentId] = useState("");
+  // const [appointmentId, setAppointmentId] = useState("");
 
   const [showViewModal, setShowViewModal] = useState(false);
   const [viewFeedback, setViewFeedback] = useState<ViewFeedback | null>(null);
@@ -84,10 +84,10 @@ const OnlineConsultations: React.FC = () => {
   const [UserId, setUserId] = useState("");
   const [patientId, setPatientId] = useState("");
 
-  const [checkAlready, setCheckAlready] = useState("");
+  // const [checkAlready, setCheckAlready] = useState("");
 
-  const [prevComment, setPrevComment] = useState("");
-  const [prevStar, setPrevStar] = useState("");
+  // const [prevComment, setPrevComment] = useState("");
+  // const [prevStar, setPrevStar] = useState("");
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -97,7 +97,7 @@ const OnlineConsultations: React.FC = () => {
         const fetchedAppointments = await fetchingAllOnlineAppointments(userId);
         console.log("fethcedAppointment>>>", fetchAppointments);
         const formattedAppointments = fetchedAppointments.map(
-          (appointment) => ({
+          (appointment: { appointmentDate: string; }) => ({
             ...appointment,
             appointmentDate: formatDate(appointment.appointmentDate),
           })
@@ -121,6 +121,7 @@ const OnlineConsultations: React.FC = () => {
   };
 
   const handleJoin = (consultation: Consultation) => {
+    
     setSelectedConsultation(consultation);
     setShowJoinModal(true);
   };
@@ -197,6 +198,7 @@ const OnlineConsultations: React.FC = () => {
   };
 
   const videoCall = () => {
+    console.log("unique iddd",uniqueId)
     navigate(`/room/${uniqueId}`);
   };
 
@@ -394,175 +396,175 @@ const OnlineConsultations: React.FC = () => {
     );
   };
   return (
-    <div className="mt-24 mb-10">
-      <ToastContainer />
-      <div className="w-full h-screen flex flex-row">
-        <div className="w-1/6">
-          <Sidebar />
-        </div>
-        <div className="w-5/6 h-screen bg-white p-6 overflow-y-auto">
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Online Consultations
-            </h1>
+      <div className="mt-24 mb-10">
+        <ToastContainer />
+        <div className="w-full h-screen flex flex-row">
+          <div className="w-1/6">
+            <Sidebar />
           </div>
-
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-blue-600">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-white">
-                      DOCTOR NAME
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-white">
-                      SCHEDULED ON
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-white">
-                      PHONE
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-white">
-                      PRICE
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-white">
-                      STATUS
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-white">
-                      ACTIONS
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {consultations.map((consultation) => (
-                    <tr key={consultation._id}>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        Dr. {consultation.doctorDetails.personalInfo.name}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        {consultation.appointmentDate}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        {consultation.doctorDetails.personalInfo.phone}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        {
-                          consultation.doctorDetails.financialInfo
-                            .consultationFees.online
-                        }
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          {consultation.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex space-x-2">
-                          {/* Join Button: Only accessible if the status is "confirmed" */}
-                          <button
-                            onClick={() => handleJoin(consultation)}
-                            disabled={consultation.status !== "confirmed"} // Disable if not confirmed
-                            className={`inline-flex items-center px-3 py-1.5 text-sm font-medium  ${
-                              consultation.status === "confirmed"
-                                ? "text-white bg-blue-600 hover:bg-blue-700 rounded-md"
-                                : "text-gray-500 bg-gray-300 cursor-not-allowed rounded-sm"
-                            }`}
-                          >
-                            <Video className="w-4 h-4 mr-1.5 " />
-                            Join
-                          </button>
-
-                          {/* Rate & Feedback Button: Only accessible if there's no feedback yet */}
-                          {consultation.hasFeedback ? (
-                            <button
-                              onClick={() => handleViewFeedback(consultation)}
-                              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-                            >
-                              <Eye className="w-4 h-4 mr-1.5" />
-                              View
-                            </button>
-                          ) : (
-                            consultation.status === "completed" && (
-                              <button
-                                onClick={() => handleFeedback(consultation)}
-                                disabled={consultation.status==='confimed'} // Disable if not confirmed
-                                className={`inline-flex items-center px-3 py-1.5 text-sm font-medium ${
-                                  consultation.status === "completed"
-                                    ? "text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-                                    : "text-gray-500 bg-gray-300 cursor-not-allowed"
-                                }`}
-                              >
-                                Rate & Feedback
-                              </button>
-                            )
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <div className="w-5/6 h-screen bg-white p-6 overflow-y-auto">
+            <div className="mb-6">
+              <h1 className="text-2xl font-semibold text-gray-900">
+                Online Consultations
+              </h1>
             </div>
 
-            {consultations.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-sm">
-                  No consultations scheduled
-                </p>
-              </div>
-            )}
-          </div>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-blue-600">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-white">
+                        DOCTOR NAME
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-white">
+                        SCHEDULED ON
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-white">
+                        PHONE
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-white">
+                        PRICE
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-white">
+                        STATUS
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-white">
+                        ACTIONS
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {consultations.map((consultation) => (
+                      <tr key={consultation._id}>
+                        <td className="px-6 py-4 text-sm text-gray-900">
+                          Dr. {consultation.doctorDetails.personalInfo.name}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">
+                          {consultation.appointmentDate}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">
+                          {consultation.doctorDetails.personalInfo.phone}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">
+                          {
+                            consultation.doctorDetails.financialInfo
+                              .consultationFees.online
+                          }
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {consultation.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex space-x-2">
+                            {/* Join Button: Only accessible if the status is "confirmed" */}
+                            <button
+                              onClick={() => handleJoin(consultation)}
+                              disabled={consultation.status !== "confirmed"} // Disable if not confirmed
+                              className={`inline-flex items-center px-3 py-1.5 text-sm font-medium  ${
+                                consultation.status === "confirmed"
+                                  ? "text-white bg-blue-600 hover:bg-blue-700 rounded-md"
+                                  : "text-gray-500 bg-gray-300 cursor-not-allowed rounded-sm"
+                              }`}
+                            >
+                              <Video className="w-4 h-4 mr-1.5 " />
+                              Join
+                            </button>
 
-          {showModal && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white rounded-lg p-6 shadow-lg w-1/3">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-semibold">
-                    Rate Your Experience
-                  </h3>
+                            {/* Rate & Feedback Button: Only accessible if there's no feedback yet */}
+                            {consultation.hasFeedback ? (
+                              <button
+                                onClick={() => handleViewFeedback(consultation)}
+                                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                              >
+                                <Eye className="w-4 h-4 mr-1.5" />
+                                View
+                              </button>
+                            ) : (
+                              consultation.status === "completed" && (
+                                <button
+                                  onClick={() => handleFeedback(consultation)}
+                                  // disabled={consultation.status!=='confirmed'}  // Disable if not confirmed
+                                  className={`inline-flex items-center px-3 py-1.5 text-sm font-medium ${
+                                    consultation.status === "completed"
+                                      ? "text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                                      : "text-gray-500 bg-gray-300 cursor-not-allowed"
+                                  }`}
+                                >
+                                  Rate & Feedback
+                                </button>
+                              )
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {consultations.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 text-sm">
+                    No consultations scheduled
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {showModal && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="bg-white rounded-lg p-6 shadow-lg w-1/3">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-semibold">
+                      Rate Your Experience
+                    </h3>
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="text-gray-500 hover:text-gray-700"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
+                  </div>
+                  <div className="flex justify-center mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        onClick={() => handleStarClick(star)}
+                        className={`w-8 h-8 cursor-pointer ${
+                          star <= rating ? "text-yellow-500" : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <textarea
+                    className="w-full h-24 p-3 border rounded-lg mb-4 resize-none"
+                    placeholder="Add your comment..."
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
                   <button
-                    onClick={() => setShowModal(false)}
-                    className="text-gray-500 hover:text-gray-700"
+                    onClick={handleSaveFeedback}
+                    className="w-full py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    <X className="w-6 h-6" />
+                    Save Feedback
                   </button>
                 </div>
-                <div className="flex justify-center mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      onClick={() => handleStarClick(star)}
-                      className={`w-8 h-8 cursor-pointer ${
-                        star <= rating ? "text-yellow-500" : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <textarea
-                  className="w-full h-24 p-3 border rounded-lg mb-4 resize-none"
-                  placeholder="Add your comment..."
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-                <button
-                  onClick={handleSaveFeedback}
-                  className="w-full py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Save Feedback
-                </button>
               </div>
-            </div>
-          )}
+            )}
 
-          <JoinConsultationModal
-            showJoinModal={showJoinModal}
-            setShowJoinModal={setShowJoinModal}
-            selectedConsultation={selectedConsultation}
-          />
+            <JoinConsultationModal
+              showJoinModal={showJoinModal}
+              setShowJoinModal={setShowJoinModal}
+              selectedConsultation={selectedConsultation}
+            />
 
-          <ViewFeedbackModal />
+            <ViewFeedbackModal />
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 

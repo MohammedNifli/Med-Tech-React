@@ -17,7 +17,7 @@ const UserLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
 
   // Define routes where the footer should be hidden
-  const hideFooterRoutes = ['/login', '/signup', '/otp', '/chat', '/pro-view/:id','/book/:id'];
+  const hideFooterRoutes = ['/login', '/signup', '/otp', '/chat', '/pro-view/:id','/book/:id','/premium','/premium-checkout','/user/success','/find','/profile'];
 
   // Check if the current route matches any route in hideFooterRoutes
   const shouldShowFooter = !hideFooterRoutes.some(route => matchesDynamicRoute(route, location.pathname));

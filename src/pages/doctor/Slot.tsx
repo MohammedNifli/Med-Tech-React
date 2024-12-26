@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { Trash2, Edit } from "lucide-react";
 import axiosInstance from "../../utils/axiosClient";
-import Time from "react-datepicker/dist/time";
+// import Time from "react-datepicker/dist/time";
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -33,18 +33,28 @@ const DAYS_OF_WEEK = [
   "Saturday",
 ];
 
-interface TimeSlot {
+// interface TimeSlot {
+//   _id: string;
+//   date: string;
+//   time: string;
+//   status: string;
+//   doctorId: string;
+//   mode:string
+// }
+
+// interface SlotType {
+//   date: string; // Format: "DD/MM/YYYY"
+//   startTime: string; // Example: "10:30 AM"
+// }
+
+interface Slot {
   _id: string;
   date: string;
-  time: string;
-  status: string;
-  doctorId: string;
-  mode:string
-}
-
-interface SlotType {
-  date: string; // Format: "DD/MM/YYYY"
-  startTime: string; // Example: "10:30 AM"
+  startTime: string;
+  status: "available" | "booked" | "unavailable"; // Customize the status options based on your requirements
+  time:string;
+  period :string;
+  day:string
 }
 
 const Slot: React.FC = () => {
@@ -55,14 +65,14 @@ const Slot: React.FC = () => {
   const [startTime, setStartTime] = useState("");
   const [startPeriod, setStartPeriod] = useState("AM");
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
-  const [existingSlots, setExistingSlots] = useState<string[]>([]);
+  const [existingSlots, setExistingSlots] = useState<Slot[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   //edit slot state
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
-  const [editSlot, setEditSlot] = useState<object[]>([]);
+  const [editSlot, setEditSlot] = useState<Slot[]>([]);
   const [oldDate, setOldDate] = useState("");
-  const [oldTime, setOldTime] = useState("");
+  // const [oldTime, setOldTime] = useState("");
   const [mode, setMode] = useState("online");
 
   const doctorAuth = useSelector((state: RootState) => state.doctor);
@@ -177,7 +187,7 @@ const Slot: React.FC = () => {
       timeSlots: timeSlots,
       doctorId: docId,
       availableDays: selectedDays,
-      consultationMode:mode,
+      consultationMode: mode,
     };
 
     try {
@@ -202,68 +212,59 @@ const Slot: React.FC = () => {
 
   //edit modal
 
-  const handleEditSlot = (slot: {
-    date: string;
-    startTime: string;
-    status: string;
-  }) => {
+  const handleEditSlot = (slot: Slot) => {
     setEditModalOpen(true);
-
+  
     // Destructure the slot details
-    const { date: dateString, startTime } = slot;
-
+    const { date: dateString, startTime, _id, status } = slot;
+  
     // Convert date and time to UTC ISO format
     const oldDateTime = convertToISOFormat(dateString, startTime);
     setOldDate(oldDateTime);
     console.log("slotDateTime in UTC:", oldDateTime);
-
-    // Validation: Ensure date and time are defined
-    if (!dateString || !startTime) {
+  
+    // Validate input
+    if (!_id || !dateString || !startTime) {
       console.error("Invalid slot data:", slot);
       return;
     }
-
+  
     // Parse the date string (format: DD/MM/YYYY)
     const [day, month, year] = dateString.split("/").map(Number);
     if (!day || !month || !year) {
       console.error("Invalid date format:", dateString);
       return;
     }
-
+  
     const date = new Date(year, month - 1, day); // Month is 0-indexed
     if (isNaN(date.getTime())) {
       console.error("Failed to parse date:", dateString);
       return;
     }
-
+  
     // Get day of the week
     const dayNumber = date.getDay();
-    const dayNames = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const dayNames = DAYS_OF_WEEK;
     const slotDay = dayNames[dayNumber];
-
+  
     // Format date as YYYY-MM-DD
     const formattedDate = date.toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
     console.log("Formatted Date:", formattedDate);
-
+  
     // Convert time to 12-hour format (optional)
     const [time, period] = convertTo12HourFormat(startTime);
-
-    // Prepare slot data
-    const Slot = {
+  
+    // Prepare complete Slot object
+    const Slot: Slot = {
+      _id: slot._id,
       date: formattedDate,
+      startTime: startTime,
+      status: status,
       time: time,
       period: period,
       day: slotDay,
     };
-
+  
     setEditSlot([Slot]); // Since Chakra modal edits one slot at a time
   };
 
@@ -305,7 +306,7 @@ const Slot: React.FC = () => {
     return utcDate.toISOString();
   }
 
-  const handleUpdateSlot = async (slot) => {
+  const handleUpdateSlot = async (slot:Slot[]) => {
     console.log("slot", slot);
 
     // Step 1: Ensure 'slot.date' and 'slot.time' are defined

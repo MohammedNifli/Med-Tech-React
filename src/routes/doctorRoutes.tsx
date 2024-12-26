@@ -11,6 +11,7 @@ import Chat from '../pages/user/ChatPage'
 import AppointmentList from '../pages/doctor/appointmentList';
 import Dashboard from '../pages/doctor/Dashboard';
 import DoctorWallet from '../pages/doctor/doctorWallet';
+import DoctorHomePage from '../pages/doctor/doctorHomePage';
 
 interface RouteConfig {
     path: string; 
@@ -30,7 +31,8 @@ const doctorRoutes: RouteConfig[] = [
     { path: '/doctor/chat', element: <Chat />, private: false},
     { path: '/doctor/appointments', element: <AppointmentList/>, private: false},
     { path: '/doctor/dashboard', element: <Dashboard/>, private: false},
-    { path: '/doctor/wallet', element: <DoctorWallet/>, private: false}
+    { path: '/doctor/wallet', element: <DoctorWallet/>, private: false},
+    { path: '/doctor/home', element: <DoctorHomePage/>, private: false,allowedRoles:['doctor']}
 
 ];
 

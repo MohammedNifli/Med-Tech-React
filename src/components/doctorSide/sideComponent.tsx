@@ -1,151 +1,97 @@
 import React, { useState } from "react";
-import {
-  FcApproval,
-  FaUser,
-  FaCalendarAlt,
-  FaClipboardCheck,
-  FaClock,
-  FaComments,
-  FaCheckCircle,
-  FaMoneyBillWave,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { ChevronRight, User, CalendarDays, ClipboardCheck, Clock, MessageSquare, CheckCircle2, Wallet, LogOut, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logoutDoctor } from "../../slices/doctorSlice";
-// import {toast,ToastContainer} from 'react-toastify'
-import axios from "axios";
-import { toast } from "react-toastify";
-const SidebarComponent: React.FC = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate(); // Use navigate for routing
-  const [selectedItem, setSelectedItem] = useState<string>("Profile");
+
+export default function Sidebar() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("Dashboard");
+  const navigate = useNavigate();
 
   const handleItemClick = (text: string, route: string) => {
     setSelectedItem(text);
-    navigate(route); // Navigate to the route on item click
+    navigate(route);
   };
 
-  const handleLogout = async () => {
-    try {
-      console.log("hello this is  doctor logout handle function");
-      const response = await axios.post(
-        "http://localhost:4444/doctor/logout",
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(response);
-      if (response.status == 200) {
-        alert("logout succesfull");
-        dispatch(logoutDoctor());
-        navigate("/doctor/login");
-      }
-
-      // toast.success('Logged out successfully');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const sidebarItems = [
+    { icon: User, text: "Dashboard", route: "/doctor/dashboard" },
+    { icon: CalendarDays, text: "Appointments", route: "/doctor/appointments" },
+    { icon: ClipboardCheck, text: "Apply for Approval", route: "/doctor/apply" },
+    { icon: Clock, text: "Add slots", route: "/doctor/slot" },
+    { icon: MessageSquare, text: "Chat", route: "/doctor/chat" },
+    { icon: CheckCircle2, text: "Approval Status", route: "/doctor/approval" },
+    { icon: Wallet, text: "Wallet", route: "/doctor/wallet" }
+  ];
 
   return (
-    <div
-      id="main"
-      className="bg-blue-950 w-64 fixed left-0 top-20 shadow-md border border-blue-950 bottom-0 flex flex-col justify-between overflow-y-auto"
-    >
-      <div className="pt-6">
-        <ul className="text-white space-y-4">
-          <SidebarItem
-            icon={<FaUser />}
-            text="Dashboard"
-            isActive={selectedItem === "Profile"}
-            route="/doctor/dashboard"
-            onClick={handleItemClick}
-          />
-          <SidebarItem
-            icon={<FaCalendarAlt />}
-            text="Appointments"
-            isActive={selectedItem === "Appointments"}
-            route="/doctor/appointments"
-            onClick={handleItemClick}
-          />
-          <SidebarItem
-            icon={<FaClipboardCheck />}
-            text="Apply for Approval"
-            isActive={selectedItem === "Apply for Approval"}
-            route="/doctor/apply"
-            onClick={handleItemClick}
-          />
-          <SidebarItem
-            icon={<FaClock />}
-            text="Add slots"
-            isActive={selectedItem === "Add slots"}
-            route="/doctor/slot"
-            onClick={handleItemClick}
-          />
-          <SidebarItem
-            icon={<FaComments />}
-            text="Chat"
-            isActive={selectedItem === "Chat"}
-            route="/doctor/chat"
-            onClick={handleItemClick}
-          />
-          <SidebarItem
-            icon={<FaCheckCircle />}
-            text="Approval Status"
-            isActive={selectedItem === "Approval Status"}
-            route="/doctor/approval"
-            onClick={handleItemClick}
-          />
-          <SidebarItem
-            icon={<FaMoneyBillWave />}
-            text="Wallet"
-            isActive={selectedItem === "Payment"}
-            route="/doctor/wallet"
-            onClick={handleItemClick}
-          />
-        </ul>
+    <div className="flex min-h-screen">
+      {/* Mobile Menu Button */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-blue-600 text-white"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <Menu className="w-5 h-5" />
+      </button>
+
+      {/* Sidebar */}
+      <div 
+        className={`fixed left-0 top-20 h-[calc(100vh-5rem)] bg-[#0f1729] transition-all duration-300 ease-in-out flex flex-col
+          ${isExpanded ? 'w-64' : 'w-16'} 
+          ${isExpanded ? 'md:w-64' : 'md:w-16'}
+        `}
+      >
+        {/* Logo Area */}
+        <div className="h-16 flex items-center justify-between px-4">
+          {isExpanded && (
+            <span className="text-white font-semibold">Doctor Panel</span>
+          )}
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-white p-1 rounded-lg hover:bg-blue-800 transition-colors"
+          >
+            <ChevronRight className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+
+        {/* Navigation Items */}
+        <nav className="flex-1 px-2 py-4 overflow-y-auto">
+          {sidebarItems.map((item) => (
+            <div
+              key={item.text}
+              onClick={() => handleItemClick(item.text, item.route)}
+              className={`flex items-center cursor-pointer px-2 py-3 mb-1 rounded-lg transition-all duration-200
+                ${selectedItem === item.text ? 'bg-blue-800 text-white' : 'text-gray-400 hover:bg-blue-800/50 hover:text-white'}
+              `}
+            >
+              <item.icon className={`w-5 h-5 ${isExpanded ? 'mr-3' : 'mx-auto'}`} />
+              {isExpanded && (
+                <span className="text-sm font-medium whitespace-nowrap">
+                  {item.text}
+                </span>
+              )}
+            </div>
+          ))}
+        </nav>
+
+        {/* Logout Button */}
+        <div className="p-4 mt-auto border-t border-blue-800">
+          <button
+            className={`flex items-center text-red-400 hover:text-red-300 transition-colors w-full
+              ${isExpanded ? 'px-2 py-2' : 'justify-center py-2'}
+              hover:bg-red-500/10 rounded-lg
+            `}
+          >
+            <LogOut className={`w-5 h-5 ${isExpanded ? 'mr-3' : ''}`} />
+            {isExpanded && (
+              <span className="text-sm font-medium">Logout</span>
+            )}
+          </button>
+        </div>
       </div>
-      <div className="py-6">
-        <button
-          onClick={handleLogout}
-          className="w-full bg-red-600 text-white py-2 px-4 rounded-md flex items-center justify-center space-x-2 hover:bg-red-700 transition duration-300"
-        >
-          <FaSignOutAlt />
-          <span>Logout</span>
-        </button>
+
+      {/* Main Content Area */}
+      <div className={`flex-1 transition-all duration-300 ${isExpanded ? 'ml-64' : 'ml-16'} mt-20`}>
+        {/* Your main content goes here */}
       </div>
     </div>
   );
-};
-
-interface SidebarItemProps {
-  icon: React.ReactNode;
-  text: string;
-  isActive: boolean;
-  route: string;
-  onClick: (text: string, route: string) => void;
 }
-
-const SidebarItem: React.FC<SidebarItemProps> = ({
-  icon,
-  text,
-  isActive,
-  route,
-  onClick,
-}) => {
-  return (
-    <li
-      className={`flex items-center space-x-3 px-6 py-2 cursor-pointer hover:bg-blue-900 transition duration-300 ${
-        isActive ? "bg-blue-900" : ""
-      }`}
-      onClick={() => onClick(text, route)}
-    >
-      <span className="text-xl">{icon}</span>
-      <span className="font-semibold">{text}</span>
-    </li>
-  );
-};
-
-export default SidebarComponent;

@@ -44,26 +44,33 @@ const chartData = [
   { month: "June", desktop: 214, mobile: 140 },
 ];
 
-const DoctorWallet = () => {
+interface Transaction {
+  id: string; // Assuming the id is a string, adjust as per your actual data type
+  date: string; // Assuming the date is a string in ISO format
+  transactionType: string; // The type of the transaction (e.g., 'credit', 'debit')
+  amount: number; // The amount of the transaction
+}
+
+const DoctorWallet: React.FC = () => {
   const doctorId = useSelector(
     (state: RootState) => state.doctor.doctorInfo?.docId
   );
   console.log("doctorId", doctorId);
 
   const [withdrawModal, setWithdrawModal] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [withdrawNotes, setWithdrawNotes] = useState("");
+  // const [withdrawAmount, setWithdrawAmount] = useState("");
+  // const [withdrawNotes, setWithdrawNotes] = useState("");
 
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const [totalAmount, setTotalAmount] = useState();
   const [docName, setDoctorName] = useState("");
-  const paymentHistory = [
-    { id: 1, date: "2024-11-25", amount: "$120.50", status: "Completed" },
-    { id: 2, date: "2024-11-24", amount: "$80.00", status: "Pending" },
-    { id: 3, date: "2024-11-23", amount: "$200.75", status: "Completed" },
-    { id: 4, date: "2024-11-22", amount: "$50.00", status: "Failed" },
-  ];
+  // const paymentHistory = [
+  //   { id: 1, date: "2024-11-25", amount: "$120.50", status: "Completed" },
+  //   { id: 2, date: "2024-11-24", amount: "$80.00", status: "Pending" },
+  //   { id: 3, date: "2024-11-23", amount: "$200.75", status: "Completed" },
+  //   { id: 4, date: "2024-11-22", amount: "$50.00", status: "Failed" },
+  // ];
 
   useEffect(() => {
     const doctorDetails = async () => {
@@ -97,7 +104,7 @@ const DoctorWallet = () => {
     }
   };
 
-  const handleWithdrawConfirm = (amount) => {
+  const handleWithdrawConfirm = (amount: number) => {
     // Add your withdrawal logic here
     console.log(`Withdrawing ${amount}`);
     // Typically, you'd call an API or update state here
@@ -220,7 +227,7 @@ const DoctorWallet = () => {
                   </Td>
                   <Td>{payment.transactionType}</Td>
                   <Td>{payment.amount}</Td>
-                  <Td>{}</Td>
+                  <Td>{/* Add any additional data or actions here */}</Td>
                 </Tr>
               ))}
             </Tbody>

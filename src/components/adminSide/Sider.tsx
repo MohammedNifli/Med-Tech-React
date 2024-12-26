@@ -5,22 +5,22 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useFetchData from "../../hooks/useFetchData";
+// import useFetchData from "../../hooks/useFetchData";
 
-import AdminHeader from "../../components/adminSide/adminHeader";
+// import AdminHeader from "../../components/adminSide/adminHeader";
 
-interface AdminHeaderProps {
-  onSearch: (value: string) => void;
-  current?: string;
-}
+// interface AdminHeaderProps {
+//   onSearch: (value: string) => void;
+//   current?: string;
+// }
 
 const Sider: React.FC = () => {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState("Dashboard");
-  const [selectedState, setSelectedState] = useState(" "); // Default to "users" or any valid option
+  const [, setSelectedState] = useState(" "); // Default to "users" or any valid option
   
   // Fetch data using the selectedState
-  const { data, loading, error } = useFetchData(selectedState, "");
+  // const { data, loading, error } = useFetchData(selectedState, "");
 
 
   const handleLogout = async () => {
@@ -102,9 +102,9 @@ const Sider: React.FC = () => {
         </div>
       </div>
       
-      {loading && <p>Loading data...</p>}
+      {/* {loading && <p>Loading data...</p>}
       {error && <p className="text-red-500">{error}</p>}
-      {data && <p>Data fetched successfully</p>}
+      {data && <p>Data fetched successfully</p>} */}
     </>
   );
 };

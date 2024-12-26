@@ -6,7 +6,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
+  
   ResponsiveContainer,
   PieChart,
   Pie,
@@ -17,29 +17,41 @@ import { Button } from "@/components/ui/button";
 import {
   CalendarIcon,
   UserIcon,
-  HeartPulseIcon,
+  
   StethoscopeIcon,
+  BanknoteIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axiosClient";
 // import axios from "axios";
 
+
+
+type Appointment = {
+  status: string;
+  image: string;
+  userName: string;
+  appointmentDate: string;
+  timeSlot: string;
+};
+
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
 
-  const [selectedPeriod, setSelectedPeriod] = useState("yearly"); // default to yearly
-  const [filterOptions, setFilterOptions] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState("");
+  const [selectedPeriod, setSelectedPeriod] = useState<"yearly" | "monthly" | "daily">("yearly"); // default to yearly
+  const [, setFilterOptions] = useState<string[] | number[]>([]);
+
+  const [, setSelectedFilter] = useState<string|number>("");
   const [revenueData, setRevenueData] = useState([]);
-  const [data,setData]=useState([])
-  const[totalDoctors,setTotalDoctors]=useState('')
-  const[totalAppointments,setTotalAppointments]=useState('')
-  const[totalPatients,setTotalPatients]=useState('')
+  const [data, setData] = useState([]);
+  const [totalDoctors, setTotalDoctors] = useState("");
+  const [totalAppointments, setTotalAppointments] = useState("");
+  const [totalPatients, setTotalPatients] = useState("");
 
-
-
-  const [appointments, setAppointments] = useState([]);
+  const[totalRevenue,setTotalRevenue]=useState(0)
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [timeRange, setTimeRange] = useState("yearly");
   useEffect(() => {
     const dashboardData = async () => {
       const dashboardStats = await axiosInstance.get("/admin//dash-stats");
@@ -48,30 +60,11 @@ const Dashboard: React.FC = () => {
     dashboardData();
   });
 
-  const consultationData = [
-    { name: "Online Consultations", value: 65 },
-    { name: "Offline Consultations", value: 35 },
-    { name: "Chat Consultations", value: 15 },
-  ];
+ 
 
-  const COLORS = [
-    "rgba(59, 130, 246, 0.8)", // Blue for Online
-    "rgba(16, 185, 129, 0.8)", // Green for Offline
-    "rgba(16, 185, 149, 0.8)", // Additional color
-  ];
 
-  // const data = [
-  //   { name: "Group A", value: 400 },
-  //   { name: "Group B", value: 300 },
-  //   { name: "Group C", value: 300 },
-  //   { name: "Group D", value: 200 },
-  // ];
   const COLORS1 = ["#10B981", "#3B82F6", "#FFCA35", "#EC4899"];
-  // const appointments = [
-  //   { name: "John Doe", time: "10:00 AM" },
-  //   { name: "Jane Smith", time: "11:30 AM" },
-  //   { name: "Dr. Strange", time: "2:00 PM" },
-  // ];
+  
 
   const hadleClick = (tab: string, url: string) => {
     setActiveTab(tab);
@@ -79,22 +72,28 @@ const Dashboard: React.FC = () => {
     navigate(url);
   };
 
+  useEffect(() => {
+    const dashboardStats = async () => {
+      const data = await axiosInstance.get("/admin/dash-stats");
+      setTotalDoctors(data.data.dashboardStats?.doctorsCount);
+      setTotalPatients(data.data.dashboardStats?.patientCount);
+      setTotalAppointments(data.data.dashboardStats?.appointmentCount);
+      
+      console.log("data", data);
+    };
+    dashboardStats();
+  }, []);
 
-useEffect(()=>{
-  const dashboardStats=async()=>{
 
-    const data=await axiosInstance.get('/admin/dash-stats')
-    setTotalDoctors(data.data.dashboardStats?.doctorsCount)
-    setTotalPatients(data.data.dashboardStats?.patientCount)
-    setTotalAppointments(data.data.dashboardStats?.appointmentCount)
-   
-    console.log('data',data)
+  useEffect(()=>{
+    const fetchTotalRevenue=async()=>{ 
+      const data=await axiosInstance.get('/admin/amounts');
+    console.log("fetchTotalRevenue",data) 
+    setTotalRevenue(data?.data?.amounts?.totalRevenue)
+  }
+  fetchTotalRevenue();
 
-
-  } 
-  dashboardStats()
-},[])
-
+  },[])
 
   useEffect(() => {
     const getAppointmentPercentageBySpecialization = async () => {
@@ -110,23 +109,24 @@ useEffect(()=>{
         setAppointments(appoinmentData);
 
         // Transform the fetched data into the required format for the chart
-        const chartData = fetchedData.map((item) => ({
+        const chartData = fetchedData.map((item:typeof fetchedData[number]) => ({
           name: item.specialization, // Name of the specialization
           value: item.percentage, // Percentage value
         }));
 
         setData(chartData); // Set the transformed data into the `data` array
       } catch (error) {
-        console.error("Error fetching specialization data:", error.message);
+        console.error("Error fetching specialization data:", error);
       }
     };
 
     getAppointmentPercentageBySpecialization();
   }, []);
 
-  const handlePeriodChange = (period) => {
+  const handlePeriodChange = (period: 'yearly' | 'monthly' | 'daily') => {
     setSelectedPeriod(period);
-
+    setTimeRange(period);
+  
     if (period === "yearly") {
       const years = Array.from(
         { length: 5 },
@@ -134,7 +134,6 @@ useEffect(()=>{
       );
       console.log("yearss", years);
       setFilterOptions(years);
-      setSelectedFilter(years[0]);
     } else if (period === "monthly") {
       const months = Array.from({ length: 12 }, (_, i) =>
         new Date(0, i).toLocaleString("default", { month: "short" })
@@ -152,7 +151,7 @@ useEffect(()=>{
       setSelectedFilter(days[0]);
     }
   };
-
+  
   const formatChartData = () => {
     if (selectedPeriod === "yearly") {
       return Array.from({ length: 5 }, (_, i) => ({
@@ -183,30 +182,45 @@ useEffect(()=>{
       }));
     }
   };
+  console.log(formatChartData)
 
   useEffect(() => {
-    setRevenueData(formatChartData());
-  }, [selectedPeriod, selectedFilter]);
+    const fetchTotalRevenue = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/admin/revenue?time=${timeRange}`
+        );
+        const formattedData = response.data.graphData.map((item: typeof response.data.graphData[0]) => ({
+          name: item.date, // Label for X-axis
+          totalRevenue: item.totalRevenue, // Data for Y-axis
+        }));
+        setRevenueData(formattedData);
+      } catch (error) {
+        console.error("Error fetching revenue data:", error);
+      }
+    };
+    fetchTotalRevenue();
+  }, [timeRange]);
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-xl">
-          <p className="font-bold text-gray-700 mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            <p
-              key={`item-${index}`}
-              className="text-sm"
-              style={{ color: entry.color }}
-            >
-              {entry.name}: ${entry.value.toLocaleString()}
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+  // const CustomTooltip = ({ active, payload, label }: any) => {
+  //   if (active && payload && payload.length) {
+  //     return (
+  //       <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-xl">
+  //         <p className="font-bold text-gray-700 mb-2">{label}</p>
+  //         {payload.map((entry: any, index: number) => (
+  //           <p
+  //             key={`item-${index}`}
+  //             className="text-sm"
+  //             style={{ color: entry.color }}
+  //           >
+  //             {entry.name}: ${entry.value.toLocaleString()}
+  //           </p>
+  //         ))}
+  //       </div>
+  //     );
+  //   }
+  //   return null;
+  // };
 
   return (
     <div className="w-full h-auto bg-gradient-to-br from-slate-50 to-slate-100 border border-white shadow-2xl rounded-2xl overflow-hidden p-4">
@@ -214,23 +228,12 @@ useEffect(()=>{
         <select
           className="p-2 border rounded-lg"
           value={selectedPeriod}
-          onChange={(e) => handlePeriodChange(e.target.value)}
+          onChange={(e) => handlePeriodChange(e.target.value as 'yearly' | 'monthly' | 'daily')}
         >
           <option value="yearly">Yearly</option>
           <option value="monthly">Monthly</option>
           <option value="daily">Daily</option>
         </select>
-        {/* <select
-          className="p-2 border rounded-lg"
-          value={selectedFilter}
-          onChange={(e) => setSelectedFilter(e.target.value)}
-        >
-          {filterOptions.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select> */}
       </div>
 
       {/* Navigation Tabs */}
@@ -253,9 +256,14 @@ useEffect(()=>{
               name: "patients",
               icon: <UserIcon />,
               label: "Patients",
-              url: "/admin/patinet/dash",
+              url: "/admin/patient/dash",
             },
-            { name: "health", icon: <HeartPulseIcon />, label: "Health Stats" },
+            {
+              name: "health",
+              icon: <BanknoteIcon />,
+              label: "Amount Setting",
+              url: "/admin/amount",
+            },
           ].map((tab) => (
             <button
               key={tab.name}
@@ -281,9 +289,17 @@ useEffect(()=>{
       <div className="grid grid-cols-4 gap-4 mb-6">
         {[
           { title: "Total Doctors", value: totalDoctors, color: "bg-blue-50" },
-          { title: "Total Patients", value: totalPatients, color: "bg-green-50" },
-          { title: "Total Appointments", value: totalAppointments, color: "bg-purple-50" },
-          { title: "Total Revenue", value: 342, color: "bg-orange-50" },
+          {
+            title: "Total Patients",
+            value: totalPatients,
+            color: "bg-green-50",
+          },
+          {
+            title: "Total Appointments",
+            value: totalAppointments,
+            color: "bg-purple-50",
+          },
+          { title: "Total Revenue", value: totalRevenue, color: "bg-orange-50" },
         ].map((card, index) => (
           <div
             key={index}
@@ -298,7 +314,7 @@ useEffect(()=>{
       {/* First Row: Revenue Area Chart & Consultation Pie Chart */}
       <div className="flex space-x-4 mb-4">
         {/* Total Revenue Area Chart */}
-        <div className="w-2/3 bg-white rounded-2xl border border-gray-200 shadow-xl p-4">
+        <div className="w-full bg-white rounded-2xl border border-gray-200 shadow-xl p-4">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">
             Total Revenue
           </h3>
@@ -309,61 +325,37 @@ useEffect(()=>{
             >
               {/* Gradient Definitions */}
               <defs>
-                <linearGradient
-                  id="colorOnlineRevenue"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
+                <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8} />
                   <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
                 </linearGradient>
-                <linearGradient
-                  id="colorOfflineRevenue"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
-                </linearGradient>
               </defs>
 
-              {/* X and Y Axes */}
+              {/* Axes */}
               <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#888" }} />
               <YAxis
                 tick={{ fontSize: 12, fill: "#888" }}
                 tickFormatter={(value) => `INR ${value / 1000}k`}
               />
 
-              {/* Grid, Tooltip, and Legend */}
+              {/* Grid and Tooltip */}
               <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
               <Tooltip />
-              <Legend verticalAlign="top" height={36} />
 
-              {/* Area Chart */}
+              {/* Single Line for Total Revenue */}
               <Area
                 type="monotone"
-                dataKey="onlineRevenue"
+                dataKey="totalRevenue"
                 stroke="#3B82F6"
                 fillOpacity={1}
-                fill="url(#colorOnlineRevenue)" // Refers to the gradient ID
-              />
-              <Area
-                type="monotone"
-                dataKey="offlineRevenue"
-                stroke="#10B981"
-                fillOpacity={1}
-                fill="url(#colorOfflineRevenue)" // Refers to the gradient ID
+                fill="url(#colorRevenue)"
               />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
         {/* Consultations Pie Chart */}
-        <div className="w-1/3 bg-white rounded-2xl border border-gray-200 shadow-xl p-4">
+        {/* <div className="w-1/3 bg-white rounded-2xl border border-gray-200 shadow-xl p-4">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">
             Consultation Breakdown
           </h3>
@@ -400,7 +392,7 @@ useEffect(()=>{
               />
             </PieChart>
           </ResponsiveContainer>
-        </div>
+        </div> */}
       </div>
 
       {/* Appointments and Additional Sections */}
@@ -421,7 +413,7 @@ useEffect(()=>{
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {data.map((entry, index) => (
+                  {data.map((_entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS1[index % COLORS1.length]} // Dynamically assign colors
@@ -436,32 +428,39 @@ useEffect(()=>{
 
           {/* Appointment List */}
           <div className="mt-20 ml-40">
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-6">
               Appointment List
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {appointments.map((appointment, index) => (
                 <li
                   key={index}
-                  className="p-4 bg-white rounded-lg shadow-md flex items-center space-x-4"
+                  className="p-3 bg-white rounded-lg shadow-md flex items-center justify-between space-x-4 hover:shadow-lg transition-shadow duration-300"
                 >
                   {/* User Image */}
                   <img
-                    src={appointment.image || "/default-avatar.png"} // Replace with a default image if userImage is unavailable
+                    src={appointment.image || "/default-avatar.png"}
                     alt={appointment.userName}
                     className="w-12 h-12 rounded-full object-cover"
                   />
 
                   {/* Appointment Details */}
-                  <div className="flex flex-col">
-                    <span className="font-medium text-gray-800 text-lg">
-                      {appointment?.userName}
+                  <div className="flex flex-col text-sm text-gray-700 space-y-1">
+                    <span className="font-medium text-gray-800">
+                      {appointment.userName}
                     </span>
-                    <span className="text-sm text-gray-500">
-                      Date: {appointment.appointmentDate}
+                    <span>
+                      <strong>Date:</strong> {appointment.appointmentDate}
                     </span>
-                    <span className="text-sm text-gray-500">
-                      Time: {appointment.timeSlot}
+                    <span>
+                      <strong>Time:</strong> {appointment.timeSlot}
+                    </span>
+                  </div>
+
+                  {/* Appointment Status */}
+                  <div>
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      {appointment.status}
                     </span>
                   </div>
                 </li>

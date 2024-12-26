@@ -12,7 +12,7 @@ import { RootState } from '../../reduxStore/store';
         const userId=useSelector((state:RootState)=>state.auth?.user?._id)
         
         console.log("patientName",patient)
-    const [patientName, setPatientName] = useState('');
+    const [, setPatientName] = useState('');
     // const [couponCode, setCouponCode] = useState('');
     // const [showCouponModal, setShowCouponModal] = useState(false);
     const [isNameValid, setIsNameValid] = useState(true);
@@ -55,11 +55,12 @@ import { RootState } from '../../reduxStore/store';
                 });
                  
                 const { url } = response.data; // Get the URL from the response
+                console.log('payyyyyyyy',response)
                 console.log(response)
                 console.log("Redirecting to Stripe Checkout:", url);
         
-                // Redirect to the Stripe Checkout session
-                window.location.href = url; // Redirect to the Stripe Checkout page
+                // Red; irect to the Stripe Checkout session
+                window.location.href = url// Redirect to the Stripe Checkout page
             } catch (error) {
                 console.error('Error processing payment:', error);
             }

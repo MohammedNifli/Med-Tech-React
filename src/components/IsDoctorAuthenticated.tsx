@@ -17,7 +17,7 @@ const IsAuthenticatedRoute: React.FC<IsAuthenticatedRouteProps> = ({ children })
   console.log('Is Authenticated:', isAuthenticated);
 
   if (isAuthenticated) {
-    return <Navigate to="/doctor/approval" replace />;
+    return <Navigate to="/doctor/home" replace />;
   }
 
   return <>{children}</>;

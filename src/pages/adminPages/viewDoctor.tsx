@@ -6,28 +6,44 @@ import {
   rejectApplication,
 } from "../../services/adminServices";
 
+interface Clinic {
+  name: string;
+  address: string;
+}
+
+interface ProfessionalInfo {
+  specialization: string;
+  certificates?: { file: string }[]; // Array of certificate objects
+  licenseFile?: string; // Single license file URL
+}
+
+interface AccountStatus {
+  verificationStatus: "verified" | "rejected" | "pending";
+}
+
+interface PersonalInfo {
+  name: string;
+  phone: string;
+}
+
 interface DoctorProfile {
-  personalInfo?: {
-    name: string;
-    phone: string;
+  practiceInfo?: {
+    clinics: Clinic[];
   };
-  professionalInfo?: {
-    specialization: string;
-    certificates?: string[]; // Array of certificate images
-    licenseFile?: string; // Single license image
-  };
-  accountStatus?: {
-    verificationStatus: string;
-  };
+  personalInfo?: PersonalInfo;
+  professionalInfo?: ProfessionalInfo;
+  accountStatus?: AccountStatus;
 }
 
 const ViewDoctor: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [profileData, setProfileData] = useState<DoctorProfile | null>(null);
-  const [clinicDetails, setClinicDetails] = useState([]);
+  const [clinicDetails, setClinicDetails] = useState<Clinic[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedDocuments, setSelectedDocuments] = useState<string[] | null>(null); // Array of selected images for certificates or single license image
+  const [selectedDocuments, setSelectedDocuments] = useState<string[] | null>(
+    null
+  );
 
   const fetchDoctorData = useCallback(async () => {
     try {
@@ -48,7 +64,8 @@ const ViewDoctor: React.FC = () => {
 
   const handleApprove = useCallback(async () => {
     try {
-      await approveApplication(id as string);
+      if (!id) return;
+      await approveApplication(id);
       fetchDoctorData();
     } catch (error) {
       console.error("Error approving doctor:", error);
@@ -57,15 +74,16 @@ const ViewDoctor: React.FC = () => {
 
   const handleReject = useCallback(async () => {
     try {
-      await rejectApplication(id as string);
+      if (!id) return;
+      await rejectApplication(id);
       fetchDoctorData();
     } catch (error) {
       console.error("Error rejecting doctor:", error);
     }
   }, [id, fetchDoctorData]);
 
-  const openModal = (documents: string[] | string) => {
-    setSelectedDocuments(Array.isArray(documents) ? documents : [documents]); // Ensure selectedDocuments is always an array
+  const openModal = (documents: string[]) => {
+    setSelectedDocuments(documents);
     setShowModal(true);
   };
 
@@ -166,7 +184,13 @@ const ViewDoctor: React.FC = () => {
                 </td>
                 <td className="p-3">
                   <button
-                    onClick={() => openModal(profileData.professionalInfo?.certificates?.map((img)=>img.file) || [])}
+                    onClick={() =>
+                      openModal(
+                        profileData.professionalInfo?.certificates?.map(
+                          (img) => img.file
+                        ) || []
+                      )
+                    }
                     className="bg-blue-600 rounded px-4 py-2 text-white font-semibold"
                   >
                     View
@@ -179,7 +203,13 @@ const ViewDoctor: React.FC = () => {
                 </td>
                 <td className="p-3">
                   <button
-                    onClick={() => openModal(profileData.professionalInfo?.licenseFile || "")}
+                    onClick={() =>
+                      openModal(
+                        profileData.professionalInfo?.licenseFile
+                          ? [profileData.professionalInfo.licenseFile]
+                          : []
+                      )
+                    }
                     className="bg-blue-600 rounded px-4 py-2 text-white font-semibold"
                   >
                     View

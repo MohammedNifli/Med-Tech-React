@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { doctorSignUp } from "../../services/doctorServices";
-import axiosInstance from "@/utils/axiosClient";
 
 const DoctorSignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -73,7 +72,7 @@ const DoctorSignUp: React.FC = () => {
           {/* Right side - Sign Up Form */}
           <div className="w-full lg:w-1/2 p-4 sm:p-6 md:p-8 lg:p-10">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-navy-900 mb-2 text-center lg:text-left">
-              Doctor's Sign up
+              Doctor&apos;s Sign up
             </h1>
             <p className="text-sm sm:text-base text-gray-600 mb-6 text-center lg:text-left">
               Hey, enter your details to create your account

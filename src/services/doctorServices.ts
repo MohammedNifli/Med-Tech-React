@@ -1,5 +1,5 @@
 
-import axios from "axios"
+
 import axiosInstance from "../utils/axiosClient"
 
 export const  doctorApprovalStatus=async(doctorId:string)=>{
