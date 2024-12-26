@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import React from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { doctorSignUp } from "../../services/doctorServices";
+import axiosInstance from "@/utils/axiosClient";
 
 const DoctorSignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const DoctorSignUp: React.FC = () => {
         if (response.status === 201) {
 
           toast.success("Registered successfully!");
-          await axios.post("http://localhost:4444/otp/doctor/send", { email: values.email });
+          await axiosInstance.post("/otp/doctor/send", { email: values.email });
         
           navigate("/doctor/otp", { state: { email: values.email, doctorId: response.data.doctor._id } });
 
