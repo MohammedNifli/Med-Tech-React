@@ -129,9 +129,15 @@ const UserProfile: React.FC = () => {
       const presignedUrl=presignedUrlResponse.data?.presignedUrl
       console.log("urlll",presignedUrl)
       
-      const uploadImage=await uploadFileToS3(presignedUrl,profileData.photo)
-      console.log('uploaded image in the s3',uploadImage)
-
+      if (profileData.photo && typeof profileData.photo === 'object' && profileData.photo instanceof File) {
+        const uploadImage = await uploadFileToS3(presignedUrl, profileData.photo);
+        console.log('uploaded image in the s3', uploadImage);
+      } else {
+        console.warn('No photo selected or invalid file type');
+        // Handle the case where no photo was selected or it's not a valid File object
+        // You might want to show an error message to the user or prevent form submission
+      }
+    
       const s3FileUrl = presignedUrl.split('?')[0];
       
        formData.append('photo',s3FileUrl)

@@ -17,7 +17,7 @@ const DoctorLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     return (
         <div className="flex flex-col min-h-screen bg-gray-100">
             {/* Fixed header at the top */}
-            <DocHeader className="fixed top-0 left-0 right-0 z-10 bg-white shadow-md" />
+            <DocHeader onMenuClick={()=>{}}/>
 
             <div className={`flex flex-1 pt-16  ${!shouldShowSidebar ? 'justify-center' : ''}`}>
                 {/* Render the sidebar if it should be shown */}

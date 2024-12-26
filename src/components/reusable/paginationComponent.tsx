@@ -16,25 +16,37 @@ const Pagination = <T,>({ items, pageLimit, setPageItems }: PaginationProps<T>) 
   }, [pageNumber, setPageItems, pageData]);
 
   return (
-    <Center mt={4}>
-      <ButtonGroup spacing="4">
-        <Button onClick={previousPage} disabled={pageNumber === 0} colorScheme="blue" variant="outline">
-          Prev
-        </Button>
-        <Input
-          value={pageNumber}
-          onChange={(e) => changePage(Number(e.target.value) || 0)}
-          type="number"
-          min={0}
-          max={Math.ceil(items.length / pageLimit) - 1}
-          width="50px"
-          textAlign="center"
-        />
-        <Button onClick={nextPage} disabled={pageNumber >= Math.ceil(items.length / pageLimit) - 1} colorScheme="blue" variant="outline">
-          Next
-        </Button>
-      </ButtonGroup>
-    </Center>
+    <React.Fragment>
+      <Center mt={4}>
+        <ButtonGroup spacing="4">
+          <Button
+            onClick={previousPage}
+            disabled={pageNumber === 0}
+            colorScheme="blue"
+            variant="outline"
+          >
+            Prev
+          </Button>
+          <Input
+            value={pageNumber}
+            onChange={(e) => changePage(Number(e.target.value) || 0)}
+            type="number"
+            min={0}
+            max={Math.ceil(items.length / pageLimit) - 1}
+            width="50px"
+            textAlign="center"
+          />
+          <Button
+            onClick={nextPage}
+            disabled={pageNumber >= Math.ceil(items.length / pageLimit) - 1}
+            colorScheme="blue"
+            variant="outline"
+          >
+            Next
+          </Button>
+        </ButtonGroup>
+      </Center>
+    </React.Fragment>
   );
 };
 

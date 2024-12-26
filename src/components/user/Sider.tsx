@@ -12,7 +12,7 @@ import {
 
 const Sidebar:React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const [selected,setSelected]= useState('Appointments')
+  // const [selected,setSelected]= useState('Appointments')
 
   const navigationItems = [
     { icon: Calendar, label: 'Appointments', href: '/appointments', active: true },
