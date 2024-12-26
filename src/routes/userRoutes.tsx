@@ -38,7 +38,7 @@ interface RouteConfig {
 
 // User Routes configuration
 const userRoutes: RouteConfig[] = [
-  { path: '/', element: <Home />, private: true, allowedRoles: ['user'] }, // Accessible by users and admins
+  { path: '/', element: <Home />, allowedRoles: ['user'] }, // Accessible by users and admins
   { path: '/signup', element: <IsAuthenticatedRoute><Signup /></IsAuthenticatedRoute> ,allowedRoles: ['user']}, // Public route for Signup
   { path: '/login', element: <IsAuthenticatedRoute><Login /></IsAuthenticatedRoute>,allowedRoles: ['user'] }, // Public route for Login
   { path: '/otp', element: <UserOTPPage /> }, // Public route for OTP verification
