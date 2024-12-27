@@ -111,7 +111,7 @@ const Slot: React.FC = () => {
       console.log("Formatted Date:", formattedDate); // Should log in YYYY-MM-DD format
       console.log("Time:", time); // Should log time as HH:MM
 
-      await axios.delete(`http://localhost:4444/doctor/slot`, {
+      await axios.delete(`https://med-tech.site/doctor/slot`, {
         withCredentials: true,
         data: {
           docId,
@@ -192,7 +192,7 @@ const Slot: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4444/doctor/slot",
+        "https://med-tech.site/doctor/slot",
 
         payload,
         { withCredentials: true }
@@ -341,7 +341,7 @@ const Slot: React.FC = () => {
     try {
       // Step 7: Send the slot data to the backend
       const response = await axios.post(
-        "http://localhost:4444/doctor/edit-slot",
+        "https://med-tech.site/doctor/edit-slot",
         { sendSlot },
         { withCredentials: true }
       );
