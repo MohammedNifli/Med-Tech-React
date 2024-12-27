@@ -38,7 +38,7 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://localhost:4444/user/logout', {}, {
+      const response = await axios.post('https://med-tech.site/user/logout', {}, {
         withCredentials: true,
       });
       console.log('Response of logout:', response);
