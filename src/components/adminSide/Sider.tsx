@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axiosInstance from "@/utils/axiosClient";
 // import useFetchData from "../../hooks/useFetchData";
 
 // import AdminHeader from "../../components/adminSide/adminHeader";
@@ -25,7 +26,7 @@ const Sider: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post("http://localhost:4444/admin/logout", {}, { withCredentials: true });
+      const response = await axiosInstance.post("/admin/logout", {}, { withCredentials: true });
 
       if (response.status === 200) {
         toast.success("Logout successful");
