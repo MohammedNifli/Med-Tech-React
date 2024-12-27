@@ -120,7 +120,7 @@ const BookingPage: React.FC = () => {
 
         // Perform the API call
         const response = await axios.get(
-          `http://localhost:4444/user/doctor-profile?id=${docId}`,
+          `https://med-tech.site/user/doctor-profile?id=${docId}`,
           { withCredentials: true }
         );
 
@@ -334,7 +334,7 @@ const BookingPage: React.FC = () => {
     try {
       console.log('appoop',appointmentData)
       const response = await axios.post(
-        "http://localhost:4444/appointment/add",
+        "https://med-tech.site/appointment/add",
         { appointmentData },
         { withCredentials: true }
       );
