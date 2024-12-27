@@ -112,7 +112,7 @@ const AppointmentList: React.FC = () => {
     try{
       console.log('amount',amount)
       console.log('appointmentId',appointmentId)
-      const response=await axios.post(`http://localhost:4444/appointment/cancel`,{amount,appointmentId,userId})
+      const response=await axios.post(`https://med-tech.site/appointment/cancel`,{amount,appointmentId,userId})
       console.log("cancel response",response)
 
     }catch(error){

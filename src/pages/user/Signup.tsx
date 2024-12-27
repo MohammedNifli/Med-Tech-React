@@ -152,7 +152,7 @@ const Signup: React.FC = () => {
         toast.success('Signup successful! Sending OTP...');
         
         // Send OTP
-        const otpResponse = await axios.post('http://localhost:4444/otp/send', { 
+        const otpResponse = await axios.post('https://med-tech.site:4444/otp/send', { 
           email: formData.email 
         });
 
@@ -162,7 +162,7 @@ const Signup: React.FC = () => {
         const userId = response.data.user?._id;
         if (userId) {
           const walletResponse = await axios.post(
-            `http://localhost:4444/wallet/create?id=${userId}`
+            `https://med-tech.site:4444/wallet/create?id=${userId}`
           );
 
           if (walletResponse.status === 201) {

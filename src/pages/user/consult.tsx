@@ -53,7 +53,7 @@ useEffect(() => {
   // Make sure patientId exists before making the request
   if (appointmentId) {
     axios
-      .get(`http://localhost:4444/appointment/get-details/?id=${appointmentId}`) // Use dynamic URL here
+      .get(`https://med-tech.site/appointment/get-details/?id=${appointmentId}`) // Use dynamic URL here
       .then((response) => {
         console.log(response);
         setPatientDetails(response.data?.patientDetails)

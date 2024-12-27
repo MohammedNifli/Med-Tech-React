@@ -16,7 +16,7 @@ import { RootState } from '../../reduxStore/store';
         const fetchWalletDetails = async () => {
           if (userId) {
             try {
-              const response = await axios.get(`http://localhost:4444/wallet/fetch-wallet?id=${userId}`);
+              const response = await axios.get(`https://med-tech.site/wallet/fetch-wallet?id=${userId}`);
               console.log("Wallet response:", response.data);
               SetBalance(response.data.walletData.balance)
             } catch (error) {

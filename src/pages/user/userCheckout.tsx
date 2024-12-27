@@ -47,7 +47,7 @@ import { RootState } from '../../reduxStore/store';
                 const currency = 'inr';
         
                 // Call your backend to create a payment session
-                const response = await axios.post('http://localhost:4444/appointment/payment', {
+                const response = await axios.post('https://med-tech.site/appointment/payment', {
                     amount,
                     currency,
                     appointmentId,
