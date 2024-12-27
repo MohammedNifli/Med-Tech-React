@@ -26,7 +26,7 @@ const Sider: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axiosInstance.post("/admin/logout", {}, { withCredentials: true });
+      const response = await axiosInstance.post("/admin/logout");
 
       if (response.status === 200) {
         toast.success("Logout successful");
