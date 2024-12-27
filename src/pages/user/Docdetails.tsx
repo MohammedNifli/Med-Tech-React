@@ -303,7 +303,7 @@ const DoctorProfileWithBooking = () => {
       setError('');
       try {
         const response = await axios.get(
-          `http://localhost:4444/user/doctor-profile?id=${docId}`,
+          `https://med-tech.site/user/doctor-profile?id=${docId}`,
           { withCredentials: true }
         );
         if (response.data && response.data.fetchedProfile) {
