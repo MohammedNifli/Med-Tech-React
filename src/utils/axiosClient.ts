@@ -2,11 +2,14 @@
 
 import axios from 'axios';
 
+const token = localStorage.getItem("token");  // Or from cookies if you're storing it there
 const axiosInstance = axios.create({
-  baseURL:  "https://med-tech.site", // Set your base URL here
-  withCredentials: true,
+  baseURL: "https://med-tech.site", 
+  headers: {
+    Authorization: `Bearer ${token}`  // Set the Authorization header
+  },
+  withCredentials: true,  // Ensure this is enabled for cross-origin requests
 });
-
 // Axios request interceptor (optional)
 axiosInstance.interceptors.request.use(
   (config) => {
