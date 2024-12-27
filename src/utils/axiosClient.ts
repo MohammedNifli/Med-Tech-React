@@ -2,16 +2,12 @@
 
 import axios from 'axios';
 
-const token = localStorage.getItem("accessToken");  // Or get from cookies if you're storing there
-const refreshToken = localStorage.getItem("refreshToken");  // Same as above
+// const token = localStorage.getItem("accessToken");  // Or get from cookies if you're storing there
+// const refreshToken = localStorage.getItem("refreshToken");  // Same as above
 
 const axiosInstance = axios.create({
   baseURL: "https://med-tech.site", 
-  headers: {
-    // Sending access token in the Authorization header
-    Authorization: `Bearer ${token}`,
-    "x-refresh-token": refreshToken,  // Sending refresh token in a custom header
-  },
+ 
   withCredentials: true,  // Ensure this is enabled to send cookies in cross-origin requests
 });
 
