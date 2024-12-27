@@ -4,7 +4,7 @@ import { CheckCircle, ThumbsUp, MapPin } from "lucide-react";
 import "react-datepicker/dist/react-datepicker.css";
 // import { IoCalendar } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+
 import AxiosInstance from "../../utils/axiosClient";
 import { useSelector } from "react-redux";
 // import { AttachmentIcon } from "@chakra-ui/icons";
@@ -12,6 +12,9 @@ import { RootState } from "../../reduxStore/store";
 import { toast, ToastContainer } from "react-toastify";
 
 import { Doctor } from '../../types/doctor';
+import axiosInstance from "../../utils/axiosClient";
+import axios from "axios";
+// import axios from "axios";
 
 
 // Dummy doctor data
@@ -109,9 +112,7 @@ const ClinicVisitBooking:React.FC = () => {
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         // Perform the API call
-        const response = await axios.get(`http://localhost:4444/user/doctor-profile?id=${docId}`, {
-          withCredentials: true
-        });
+        const response = await axiosInstance.get(`/user/doctor-profile?id=${docId}`);
         console.log("Hoo response", response.data.fetchedProfile);
         setDocProfile(response.data.fetchedProfile);
       } catch (error) {
@@ -168,7 +169,7 @@ if (visitType === 'online') {
   
     try {
       const response = await axios.post(
-        'http://localhost:4444/appointment/add',
+        'https://med-tech.site/appointment/add',
         { appointmentData },
         { withCredentials: true }
       );
