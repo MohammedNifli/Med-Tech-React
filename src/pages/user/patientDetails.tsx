@@ -93,7 +93,7 @@ const PatientDetails: React.FC = () => {
     try {
       // Save the patient data
       const response = await axios.post(
-        "http://localhost:4444/patient/add",
+        "https://med-tech.site/patient/add",
         { formData: values },
         { withCredentials: true }
       );
@@ -105,7 +105,7 @@ const PatientDetails: React.FC = () => {
         // Update the patientId in the appointment
         try {
           const updateResponse = await axios.post(
-            "http://localhost:4444/appointment/update",
+            "https://med-tech.site/appointment/update",
             { patientId, appointmentId },
             { withCredentials: true }
           );
