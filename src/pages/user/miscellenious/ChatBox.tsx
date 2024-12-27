@@ -5,7 +5,7 @@ import axiosInstance from '../../../utils/axiosClient';
 // import { RootState } from '../../../reduxStore/store';
 import io, {  } from 'socket.io-client';
 
-const socket = io.connect('http://localhost:4444');
+const socket = io.connect('https://med-tech.set');
 
 interface Message {
   _id: string;
