@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { ChevronRight, User, CalendarDays, ClipboardCheck, Clock, MessageSquare, CheckCircle2, Wallet, LogOut, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "@/utils/axiosClient";
+import { toast } from "react-toastify";
 
 interface SidebarItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -27,6 +29,15 @@ const Sidebar: React.FC = () => {
     setSelectedItem(text);
     navigate(route);
   };
+
+
+  const handleLogout=async()=>{
+    const response=await axiosInstance('/doctor/logout');
+    if(response.status>=200){
+      toast.success('logout succesfully')
+    }
+
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -80,7 +91,7 @@ const Sidebar: React.FC = () => {
               hover:bg-red-500/10 rounded-lg
             `}
           >
-            <LogOut className={`w-5 h-5 ${isExpanded ? "mr-3" : ""}`} />
+            <LogOut onClick={handleLogout} className={`w-5 h-5 ${isExpanded ? "mr-3" : ""}`} />
             {isExpanded && <span className="text-sm font-medium">Logout</span>}
           </button>
         </div>
