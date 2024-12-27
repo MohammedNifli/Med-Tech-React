@@ -123,7 +123,7 @@ const UserProfile: React.FC = () => {
       const fileType=profileData.photo?.type
       const fileName=profileData.photo?.name;
       
-      const presignedUrlResponse=await axios.post('http://localhost:4444/user/presigned-url',{fileType,fileName})
+      const presignedUrlResponse=await axios.post('https://med-tech.site/user/presigned-url',{fileType,fileName})
       console.log('presignedUrl',presignedUrlResponse)
 
       const presignedUrl=presignedUrlResponse.data?.presignedUrl
