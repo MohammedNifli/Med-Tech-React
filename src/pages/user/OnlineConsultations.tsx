@@ -218,8 +218,8 @@ const OnlineConsultations: React.FC = () => {
     };
 
     const handleDeleteFeedback = () => {
-      // Logic for deleting feedback
-      console.log("Feedback deleted");
+      
+   
       setShowViewModal(false);
     };
 

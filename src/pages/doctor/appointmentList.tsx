@@ -8,6 +8,9 @@ import { Video } from 'lucide-react';
 import { Formik, Field, FieldArray, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+
 
 interface PrescriptionModalProps {
   isOpen: boolean;
@@ -239,7 +242,9 @@ export interface Appointment {
   status: 'pending' | 'confirmed' | 'completed';
 }
 const AppointmentList: React.FC = () => {
+  const navigate=useNavigate()
     const doctorId = useSelector((state: RootState) => state.doctor.doctorInfo?.docId);
+    const uniqueId=uuidv4()
   
     const [searchTerm, setSearchTerm] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
@@ -290,8 +295,13 @@ const AppointmentList: React.FC = () => {
     }, [appointments, searchTerm]);
   
     // Handle "Join" and "Mark as Completed" button actions
+    // const videoCall = () => {
+    //   console.log("unique iddd",uniqueId)
+    //   navigate(`/room/${uniqueId}`);
+    // };
     const handleJoinAppointment = (appointmentId: string) => {
       console.log(`Joining appointment: ${appointmentId}`);
+      navigate(`/room/${uniqueId}`);
       // Add logic for joining the appointment (e.g., opening a video call)
     };
   
