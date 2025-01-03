@@ -7,7 +7,8 @@ import Pagination from '../../components/reusable/paginationComponent';
 import { fetchingDoctorDetails, blockDoctor, unblockDoctor } from '../../services/adminServices';
 import { useDispatch } from 'react-redux';
 import { setDoctorBlockedState } from '../../slices/doctorSlice';
-import axios from 'axios';
+
+import axiosInstance from '@/utils/axiosClient';
 
 interface PersonalInfo {
     name: string;
@@ -66,7 +67,7 @@ const DoctorsDetails: React.FC = () => {
         setLoading(true); // Show loading state while fetching data
 
         try {
-            const response = await axios.get(`http://localhost:4444/admin/doc-filter/?filter=${selectedFilter}`); // Call the API
+            const response = await axiosInstance.get(`/admin/doc-filter/?filter=${selectedFilter}`); // Call the API
             console.log('respiratory',response?.data?.doctors)
             if (response?.data?.doctors) {
                 setDoctors(response.data.doctors); // Set the paginated results

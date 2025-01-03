@@ -6,7 +6,6 @@ import { RootState } from "../../reduxStore/store";
 import axiosInstance from "../../utils/axiosClient";
 import { MdModeStandby } from "react-icons/md";
 
-import axios from "axios";
 
 interface Doctor {
   personalInfo: {
@@ -112,7 +111,7 @@ const AppointmentList: React.FC = () => {
     try{
       console.log('amount',amount)
       console.log('appointmentId',appointmentId)
-      const response=await axios.post(`https://med-tech.site/appointment/cancel`,{amount,appointmentId,userId})
+      const response=await axiosInstance.post(`/appointment/cancel`,{amount,appointmentId,userId})
       console.log("cancel response",response)
 
     }catch(error){

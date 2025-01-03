@@ -7,6 +7,7 @@ import {  GoogleCredentialResponse } from '@react-oauth/google';
 
 // Service imports
 import { userSignUp } from '../../services/userServices';
+import axiosInstance from '@/utils/axiosClient';
 
 // Type Definitions
 interface FormData {
@@ -152,7 +153,7 @@ const Signup: React.FC = () => {
         toast.success('Signup successful! Sending OTP...');
         
         // Send OTP
-        const otpResponse = await axios.post('https://med-tech.site:4444/otp/send', { 
+        const otpResponse = await axiosInstance.post('/otp/send', { 
           email: formData.email 
         });
 
@@ -161,8 +162,8 @@ const Signup: React.FC = () => {
         // Create Wallet
         const userId = response.data.user?._id;
         if (userId) {
-          const walletResponse = await axios.post(
-            `https://med-tech.site:4444/wallet/create?id=${userId}`
+          const walletResponse = await axiosInstance.post(
+            `/wallet/create?id=${userId}`
           );
 
           if (walletResponse.status === 201) {

@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { applyForApproval } from "../../services/doctorServices";
 import PasswordModal from "../../components/doctorSide/passwordModal";
 import { uploadFileToS3 } from "../../utils/s3Upload";
+import axiosInstance from "@/utils/axiosClient";
 
 interface FormData {
   certificates?: File[] |boolean;
@@ -459,8 +460,8 @@ const Application: React.FC = () => {
       
         try {
           // Request the presigned URL from your backend
-          const presignedUrlResponse = await axios.post(
-            "http://localhost:4444/doctor/presigned-url",
+          const presignedUrlResponse = await axiosInstance.post(
+            "/doctor/presigned-url",
             { fileName, fileType },
             {withCredentials:true}
           );
@@ -498,8 +499,8 @@ const Application: React.FC = () => {
       ];
       
       // Request presigned URLs for all files
-      const presignedUrlsFunction = await axios.post(
-        "http://localhost:4444/doctor/presigned-urls",
+      const presignedUrlsFunction = await axiosInstance.post(
+        "/doctor/presigned-urls",
         { files },
         { withCredentials: true }
       );
@@ -570,8 +571,8 @@ const Application: React.FC = () => {
   ) => {
     try {
       console.log("hello", currentPassword, newPassword, confirmPassword);
-      const response = await axios.post(
-        "http://localhost:4444/doctor/password",
+      const response = await axiosInstance.post(
+        "/doctor/password",
         {
           docId,
           currentPassword,

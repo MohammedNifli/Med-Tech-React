@@ -4,7 +4,7 @@ import Home from '../pages/user/Home';
 import Signup from '../pages/user/Signup';
 import Login from '../pages/user/Login';
 import UserOTPPage from '../pages/user/Otp';
-import Search from '../pages/user/Search';
+
 import Profile from '../components/userProfile';
 import Docdetails from '../pages/user/Docdetails';
 import IsAuthenticatedRoute from '../components/IsAuthenticatedRoute';
@@ -42,7 +42,7 @@ const userRoutes: RouteConfig[] = [
   { path: '/signup', element: <IsAuthenticatedRoute><Signup /></IsAuthenticatedRoute> ,allowedRoles: ['user']}, // Public route for Signup
   { path: '/login', element: <IsAuthenticatedRoute><Login /></IsAuthenticatedRoute>,allowedRoles: ['user'] }, // Public route for Login
   { path: '/otp', element: <UserOTPPage /> }, // Public route for OTP verification
-  { path: '/search', element: <Search />, private: true, allowedRoles: ['user'] }, // Private route for users only
+  // { path: '/search', element: <Search />, private: true, allowedRoles: ['user'] }, // Private route for users only
   { path: '/profile', element: <Profile />, private: true, allowedRoles: ['user'] }, // Private route for user profile
   { path: '/pro-view', element: <Docdetails />, private: true, allowedRoles: ['user'] }, // Accessible by users and admins
   { path: '/consult', element: <Consult/> , allowedRoles: ['user'] },

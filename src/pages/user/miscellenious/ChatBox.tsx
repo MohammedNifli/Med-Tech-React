@@ -60,7 +60,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatId, chatUser }) => {
     const fetchToUser = async () => {
       try {
         const response = await axiosInstance.get(
-          `http://localhost:4444/chat/single-chat?chatId=${chatId.id}`
+          `/chat/single-chat?chatId=${chatId.id}`
         );
         console.log('response', response);
 
@@ -96,7 +96,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatId, chatUser }) => {
     const fetchMessages = async () => {
       try {
         const response = await axiosInstance.get(
-          `http://localhost:4444/message/conversations?chatId=${chatId.id}`
+        `/message/conversations?chatId=${chatId.id}`
         );
         const fetchedMessages = response.data.loadedMessages.map((msg: { _id: string; sender: string; content: string; createdAt: string | number | Date; }) => ({
           _id: msg._id,
@@ -128,13 +128,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatId, chatUser }) => {
     };
 
     try {
-      const resp = await axiosInstance.post('http://localhost:4444/message/add', {
+      const resp = await axiosInstance.post('/message/add', {
         chatId: chatId.id,
         sender: userId,
         content: newMessage,
       });
       if (resp.status > 200) {
-        await axiosInstance.post('http://localhost:4444/chat/last-message', {
+        await axiosInstance.post('/chat/last-message', {
           chatId: chatId.id,
           senderId: userId,
         });

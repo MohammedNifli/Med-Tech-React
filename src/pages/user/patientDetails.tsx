@@ -1,9 +1,10 @@
-import axios from "axios";
+
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import axiosInstance from "@/utils/axiosClient";
 
 const PatientDetails: React.FC = () => {
 
@@ -92,8 +93,8 @@ const PatientDetails: React.FC = () => {
   const handleSubmit = async (values: unknown) => {
     try {
       // Save the patient data
-      const response = await axios.post(
-        "https://med-tech.site/patient/add",
+      const response = await axiosInstance.post(
+        "/patient/add",
         { formData: values },
         { withCredentials: true }
       );
@@ -104,8 +105,8 @@ const PatientDetails: React.FC = () => {
 
         // Update the patientId in the appointment
         try {
-          const updateResponse = await axios.post(
-            "https://med-tech.site/appointment/update",
+          const updateResponse = await axiosInstance.post(
+            "/appointment/update",
             { patientId, appointmentId },
             { withCredentials: true }
           );

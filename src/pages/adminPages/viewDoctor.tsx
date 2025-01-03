@@ -48,7 +48,7 @@ const ViewDoctor: React.FC = () => {
   const fetchDoctorData = useCallback(async () => {
     try {
       const response = await axios.get<{ doctorProfile: DoctorProfile }>(
-        `http://localhost:4444/doctor/profile?id=${id}`,
+        `/doctor/profile?id=${id}`,
         { withCredentials: true }
       );
       setClinicDetails(response.data?.doctorProfile?.practiceInfo?.clinics || []);

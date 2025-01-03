@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axiosClient";
 import { toast } from "react-toastify";
 
+import { useDispatch } from "react-redux";
+import { logoutDoctor } from "@/slices/doctorSlice";
+
 interface SidebarItem {
   icon: React.ComponentType<{ className?: string }>;
   text: string;
@@ -24,6 +27,7 @@ const Sidebar: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedItem, setSelectedItem] = useState("Dashboard");
   const navigate = useNavigate();
+  const dispatch=useDispatch()
 
   const handleItemClick = (text: string, route: string) => {
     setSelectedItem(text);
@@ -31,13 +35,21 @@ const Sidebar: React.FC = () => {
   };
 
 
-  const handleLogout=async()=>{
-    const response=await axiosInstance('/doctor/logout');
-    if(response.status>=200){
-      toast.success('logout succesfully')
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.post('/doctor/logout');
+  
+      if (response.status >= 200 && response.status < 300) {
+        toast.success('Logout successfully');
+        dispatch(logoutDoctor()); // Call the action creator
+        navigate('/doctor/login'); // Redirect to the login page
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+      toast.error('Failed to logout. Please try again.');
     }
-
-  }
+  };
+  
 
   return (
     <div className="flex min-h-screen">

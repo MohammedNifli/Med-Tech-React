@@ -75,7 +75,7 @@ const DoctorWallet: React.FC = () => {
   useEffect(() => {
     const doctorDetails = async () => {
       const response = await axiosInstance.get(
-        `http://localhost:4444/doctor/profile?id=${doctorId}`
+        `/doctor/profile?id=${doctorId}`
       );
       console.log("doctor response", response);
       setDoctorName(response.data.doctorProfile.personalInfo?.name);
@@ -86,7 +86,7 @@ const DoctorWallet: React.FC = () => {
   useEffect(() => {
     const walletHistory = async () => {
       const response = await axiosInstance.get(
-        `http://localhost:4444/doc-wallet/wallet-details?id=${doctorId}`
+        `/doc-wallet/wallet-details?id=${doctorId}`
       );
 
       setTransactions(response.data.wallet.transactions);

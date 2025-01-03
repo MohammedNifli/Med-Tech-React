@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
+
 import { useSelector } from "react-redux";
 import { RootState } from "../../reduxStore/store";
 
@@ -111,7 +111,7 @@ const Slot: React.FC = () => {
       console.log("Formatted Date:", formattedDate); // Should log in YYYY-MM-DD format
       console.log("Time:", time); // Should log time as HH:MM
 
-      await axios.delete(`https://med-tech.site/doctor/slot`, {
+      await axiosInstance.delete(`/doctor/slot`, {
         withCredentials: true,
         data: {
           docId,
@@ -191,8 +191,8 @@ const Slot: React.FC = () => {
     };
 
     try {
-      const response = await axios.post(
-        "https://med-tech.site/doctor/slot",
+      const response = await axiosInstance.post(
+        "/doctor/slot",
 
         payload,
         { withCredentials: true }
@@ -340,8 +340,8 @@ const Slot: React.FC = () => {
 
     try {
       // Step 7: Send the slot data to the backend
-      const response = await axios.post(
-        "https://med-tech.site/doctor/edit-slot",
+      const response = await axiosInstance.post(
+        "/doctor/edit-slot",
         { sendSlot },
         { withCredentials: true }
       );

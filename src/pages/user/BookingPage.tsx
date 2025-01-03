@@ -119,8 +119,8 @@ const BookingPage: React.FC = () => {
         console.log("Fetching profile for doctor ID:", docId);
 
         // Perform the API call
-        const response = await axios.get(
-          `https://med-tech.site/user/doctor-profile?id=${docId}`,
+        const response = await axiosInstance.get(
+          `/user/doctor-profile?id=${docId}`,
           { withCredentials: true }
         );
 
@@ -333,8 +333,8 @@ const BookingPage: React.FC = () => {
 
     try {
       console.log('appoop',appointmentData)
-      const response = await axios.post(
-        "https://med-tech.site/appointment/add",
+      const response = await axiosInstance.post(
+        "/appointment/add",
         { appointmentData },
         { withCredentials: true }
       );

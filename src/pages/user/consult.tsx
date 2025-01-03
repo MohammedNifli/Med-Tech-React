@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+
 // import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { useLocation, useNavigate } from 'react-router-dom';
+import axiosInstance from '@/utils/axiosClient';
 
 interface Patient{
   name:string;
@@ -52,8 +53,8 @@ const Consult: React.FC = () => {
 useEffect(() => {
   // Make sure patientId exists before making the request
   if (appointmentId) {
-    axios
-      .get(`https://med-tech.site/appointment/get-details/?id=${appointmentId}`) // Use dynamic URL here
+    axiosInstance
+      .get(`/appointment/get-details/?id=${appointmentId}`) // Use dynamic URL here
       .then((response) => {
         console.log(response);
         setPatientDetails(response.data?.patientDetails)

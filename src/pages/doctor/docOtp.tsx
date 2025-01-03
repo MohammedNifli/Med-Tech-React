@@ -3,7 +3,7 @@ import OTPComponent from "../../components/reusable/otpCompnent";
 import React, { useEffect } from "react";
 import { doctorOTPFunc, doctorResendOTP } from "../../services/doctorServices";
 
-import axios from "axios";
+import axiosInstance from "@/utils/axiosClient";
 
 
 const DoctorOTPPage:React.FC = () => {
@@ -20,7 +20,7 @@ const DoctorOTPPage:React.FC = () => {
       console.log('response',response)
       if (response.status === 200) {
         console.log("heolloo")
-          const resp = await axios.post(`http://localhost:4444/doc-wallet/new-wallet?id=${doctorId}`,);
+          const resp = await axiosInstance.post(`/doc-wallet/new-wallet?id=${doctorId}`,);
     console.log('resp', resp);
     window.location.href = `/doctor/login`;
       }

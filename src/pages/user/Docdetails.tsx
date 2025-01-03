@@ -168,8 +168,8 @@ if (visitType === 'online') {
     };
   
     try {
-      const response = await axios.post(
-        'https://med-tech.site/appointment/add',
+      const response = await axiosInstance.post(
+        '/appointment/add',
         { appointmentData },
         { withCredentials: true }
       );
@@ -302,8 +302,8 @@ const DoctorProfileWithBooking = () => {
       setIsLoading(true);
       setError('');
       try {
-        const response = await axios.get(
-          `https://med-tech.site/user/doctor-profile?id=${docId}`,
+        const response = await axiosInstance.get(
+          `/user/doctor-profile?id=${docId}`,
           { withCredentials: true }
         );
         if (response.data && response.data.fetchedProfile) {

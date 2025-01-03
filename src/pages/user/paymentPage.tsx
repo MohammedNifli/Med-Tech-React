@@ -2,10 +2,11 @@
     import { AiOutlineWallet, AiOutlineLineChart } from 'react-icons/ai';
     import { Box, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
     import Sidebar from '../../components/user/Sider';
-import axios from 'axios';
+
 import { useSelector } from 'react-redux';
 
 import { RootState } from '../../reduxStore/store';
+import axiosInstance from '@/utils/axiosClient';
 
     const PaymentPage: React.FC = () => {
 
@@ -16,7 +17,7 @@ import { RootState } from '../../reduxStore/store';
         const fetchWalletDetails = async () => {
           if (userId) {
             try {
-              const response = await axios.get(`https://med-tech.site/wallet/fetch-wallet?id=${userId}`);
+              const response = await axiosInstance.get(`/wallet/fetch-wallet?id=${userId}`);
               console.log("Wallet response:", response.data);
               SetBalance(response.data.walletData.balance)
             } catch (error) {

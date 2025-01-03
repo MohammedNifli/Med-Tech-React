@@ -1,8 +1,9 @@
-    import axios from 'axios';
+   
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { RootState } from '../../reduxStore/store';
+import axiosInstance from '@/utils/axiosClient';
 
     const UserCheckout = () => {
         const location=useLocation()
@@ -47,7 +48,7 @@ import { RootState } from '../../reduxStore/store';
                 const currency = 'inr';
         
                 // Call your backend to create a payment session
-                const response = await axios.post('https://med-tech.site/appointment/payment', {
+                const response = await axiosInstance.post('/appointment/payment', {
                     amount,
                     currency,
                     appointmentId,
@@ -59,7 +60,7 @@ import { RootState } from '../../reduxStore/store';
                 console.log(response)
                 console.log("Redirecting to Stripe Checkout:", url);
         
-                // Red; irect to the Stripe Checkout session
+               
                 window.location.href = url// Redirect to the Stripe Checkout page
             } catch (error) {
                 console.error('Error processing payment:', error);
