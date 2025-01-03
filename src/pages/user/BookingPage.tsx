@@ -313,6 +313,7 @@ const BookingPage: React.FC = () => {
       console.log("response from booking appointment", response);
 
       console.log("Booking time slot:", selectedTime);
+      console.log("wooow",response.status)
 
       if (response.status >= 200) {
         // Assuming a successful booking
