@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { GoogleLogin, GoogleCredentialResponse } from '@react-oauth/google';
+// import { GoogleLogin, GoogleCredentialResponse } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AnyAction } from '@reduxjs/toolkit';
@@ -13,7 +13,7 @@ import {  setTokens } from '../../slices/authSlice';
 
 // Service imports
 import { loginUser } from '../../services/userServices';
-import axiosInstance from '@/utils/axiosClient';
+// import axiosInstance from '@/utils/axiosClient';
 
 // Type Definitions
 interface FormErrors {
@@ -42,16 +42,16 @@ interface LoginResponse {
   };
 }
 
-interface GoogleOAuthResponse {
-  user: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-  accessToken: string;
-  refreshToken: string;
-  message: string;
-}
+// interface GoogleOAuthResponse {
+//   user: {
+//     _id: string;
+//     name: string;
+//     email: string;
+//   };
+//   accessToken: string;
+//   refreshToken: string;
+//   message: string;
+// }
 
 
 
@@ -148,54 +148,54 @@ const Login: React.FC = () => {
   };
 
   // Google OAuth Success Handler
-  const handleGoogleSuccess = async (response: GoogleCredentialResponse): Promise<void> => {
-    try {
-      const res = await axiosInstance.post<GoogleOAuthResponse>('/user/auth/google', {
-        token: response.credential,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  // const handleGoogleSuccess = async (response: GoogleCredentialResponse): Promise<void> => {
+  //   try {
+  //     const res = await axiosInstance.post<GoogleOAuthResponse>('/user/auth/google', {
+  //       token: response.credential,
+  //     }, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
   
-      if (res.status < 200 || res.status >= 300) {
-        throw new Error('Network response was not ok');
-      }
+  //     if (res.status < 200 || res.status >= 300) {
+  //       throw new Error('Network response was not ok');
+  //     }
   
-      const data = res.data;
+  //     const data = res.data;
   
-      const userData: UserData = {
-        _id: data.user._id,
-        name: data.user.name,
-        email: data.user.email,
-        role: 'user',
-      };
+  //     const userData: UserData = {
+  //       _id: data.user._id,
+  //       name: data.user.name,
+  //       email: data.user.email,
+  //       role: 'user',
+  //     };
   
-      dispatch(
-        setTokens({
-          userData,
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-          isBlocked: false,
-        })
-      );
+  //     dispatch(
+  //       setTokens({
+  //         userData,
+  //         accessToken: data.accessToken,
+  //         refreshToken: data.refreshToken,
+  //         isBlocked: false,
+  //       })
+  //     );
   
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
+  //     localStorage.setItem('accessToken', data.accessToken);
+  //     localStorage.setItem('refreshToken', data.refreshToken);
   
-      toast.success(data.message);
-      navigate('/');
-    } catch (error: unknown) {
-      console.error('Error during Google OAuth:', error instanceof Error ? error.message : error);
-      toast.error('An error occurred with Google login');
-    }
-  };
+  //     toast.success(data.message);
+  //     navigate('/');
+  //   } catch (error: unknown) {
+  //     console.error('Error during Google OAuth:', error instanceof Error ? error.message : error);
+  //     toast.error('An error occurred with Google login');
+  //   }
+  // };
   
 
 
-  const handleGoogleFailure = (): void => {
-    toast.error('Google login failed');
-  };
+  // const handleGoogleFailure = (): void => {
+  //   toast.error('Google login failed');
+  // };
 
   return (
     <div className='flex items-center justify-center bg-white w-full min-h-screen p-4 mt-2'>
@@ -266,12 +266,12 @@ const Login: React.FC = () => {
           </form>
 
           {/* Google OAuth Button */}
-          <div className='mt-4 flex justify-center'>
+          {/* <div className='mt-4 flex justify-center'>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={handleGoogleFailure}
             />
-          </div>
+          </div> */}
 
           <div className='text-center mt-6'>
             <p className='text-sm text-gray-700'>
