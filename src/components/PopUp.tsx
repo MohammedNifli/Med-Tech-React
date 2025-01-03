@@ -7,8 +7,8 @@ interface PopUpProps {
   filterOptions: string[];
   activeFilter: string | null;
   dropdownContent: { [key: string]: string[] };
-  onSelectOption: (filter: string, option: string) => void; // Add this line
-  onFilterSelect: (item: string) => void; // Add this line
+  onSelectOption: (filter: string, option: string) => void; 
+  onFilterSelect: (item: string) => void; 
 }
 
 const PopUp: React.FC<PopUpProps> = (props) => {

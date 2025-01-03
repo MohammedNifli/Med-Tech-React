@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Sider from '../components/adminSide/Sider';
-import AdminHead from '../components/adminSide/adminHeader';
+import Sider from '../components/admin/Sider';
+import AdminHead from '../components/admin/adminHeader';
 
 // Admin Layout Component
 const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {

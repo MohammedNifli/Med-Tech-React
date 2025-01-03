@@ -71,20 +71,19 @@ interface Clinic{
 
 const BookingPage: React.FC = () => {
   const { id: docId } = useParams();
-  // const doctorId=useSelector((state:RootState)=>state.doctor.doctorInfo?.docId)
+  
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user?._id);
   console.log("user id", user);
   console.log("doctor id in booking page", docId);
   const [selectedDate, setSelectedDate] = useState(startOfToday());
-  // const [selectedSlot, setSelectedSlot] = useState("");
+
   const [showCalendar, setShowCalendar] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(startOfToday());
 
-  //added states
-  // const [timeSlots, setTimeSlots] = useState([]);
+
   const [selectedTime, ] = useState<string>("");
-  // const [selectedDate1, setSelectedDate1] = useState(new Date());
+ 
   const [visitType, ] = useState<string>("offline");
   const [, setDocProfile] = useState(null);
 
@@ -108,23 +107,21 @@ const BookingPage: React.FC = () => {
   });
   const [consultationMode, setConsultationMode] = useState("");
 
-  //add remove
-
-  //useeffect
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Optional delay (can be removed if unnecessary)
+        
 
         console.log("Fetching profile for doctor ID:", docId);
 
-        // Perform the API call
+  
         const response = await axiosInstance.get(
           `/user/doctor-profile?id=${docId}`,
           { withCredentials: true }
         );
 
-        // Check for success status
+        
         if (response.status === 200) {
           const profile = response.data.fetchedProfile;
           console.log(
@@ -139,7 +136,7 @@ const BookingPage: React.FC = () => {
           setDocProfile(profile);
           setClinicDetails(profile.practiceInfo.clinics[0]);
 
-          // Log after the state has updated in the next render
+          
           console.log("State updated successfully!", personalInfo);
         }
       } catch (error) {
@@ -148,9 +145,9 @@ const BookingPage: React.FC = () => {
     };
 
     fetchData();
-  }, [docId]); // Re-run when docId changes
+  }, [docId]); 
 
-  // Log `professionalInfo` after it updates
+
   useEffect(() => {
     console.log("Updated professionalInfo state:", personalInfo);
   }, [professionalInfo]);
@@ -168,7 +165,7 @@ const BookingPage: React.FC = () => {
 
       let response;
 
-      // Fetch slots based on consultation mode
+      
       if (consultationMode === "online") {
         response = await AxiosInstance.get(
           `/user/online-slots?id=${docId}&date=${formattedDate}`
@@ -185,24 +182,23 @@ const BookingPage: React.FC = () => {
 
       console.log("Fetched Time Slots:", response.data.slots);
 
-      // Categorize slots into morning and afternoon
+  
       const morning: string[] = [];
       const afternoon: string[] = [];
 
       response.data.slots.forEach(
         (slot: { startTime: string; status: string }) => {
-          const [hour] = slot.startTime.split(":").map(Number); // Split and convert to number
+          const [hour] = slot.startTime.split(":").map(Number); 
           console.log('hour',hour)
 
           if (slot.status === "available") {
             if (slot.startTime) {
-              morning.push(slot.startTime); // Afternoon slots (12 PM onwards)
+              morning.push(slot.startTime); 
             } else {
-              morning.push(slot.startTime); // Morning slots (before 12 PM)
+              morning.push(slot.startTime); 
             }
           }
-          console.log("mornnig slots", morning);
-          console.log("afternoon slots", afternoon);
+          
         }
       );
 
@@ -211,12 +207,11 @@ const BookingPage: React.FC = () => {
       setMorningSlots(morning);
       setAfternoonSlots(afternoon);
 
-      console.log("Morning Slots:", morning);
-      console.log("Afternoon Slots:", afternoon);
+     
     } catch (error) {
       console.error("Error fetching time slots:", error);
 
-      // Reset the states in case of error
+      
       setTimeSlots([]);
       setMorningSlots([]);
       setAfternoonSlots([]);
@@ -224,10 +219,10 @@ const BookingPage: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("ssssssssssssss", selectedDate);
-    const data = fetchTimeSlot(selectedDate);
 
-    console.log("fetchTimeslot", data);
+    const data = fetchTimeSlot(selectedDate);
+    console.log(data)
+
   }, [docId, selectedDate]);
 
   // Calendar Functions
@@ -240,7 +235,7 @@ const BookingPage: React.FC = () => {
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
 
-  // Generate next 7 days from selected date
+  
   const dateOptions = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
       const date = addDays(selectedDate, i);
@@ -253,31 +248,8 @@ const BookingPage: React.FC = () => {
     });
   }, [selectedDate]);
 
-  // const morningSlots = [
-  //   "8:00 AM",
-  //   "8:30 AM",
-  //   "9:00 AM",
-  //   "9:30 AM",
-  //   "10:00 AM",
-  //   "10:30 AM",
-  //   "11:00 AM",
-  //   "11:30 AM",
-  // ];
-
-  // const afternoonSlots = [
-  //   "12:00 PM",
-  //   "12:30 PM",
-  //   "1:00 PM",
-  //   "1:30 PM",
-  //   "2:00 PM",
-  //   "2:30 PM",
-  //   "3:00 PM",
-  //   "3:30 PM",
-  //   "4:00 PM",
-  //   "4:30 PM",
-  // ];
-
-  // Doctor Info object remains the same
+  
+  
   const doctorInfo = {
     name: "Dr. Mohammed Nifli",
     credentials: ["MBBS", "MD", "Cardiologist"],
@@ -342,7 +314,7 @@ const BookingPage: React.FC = () => {
 
       console.log("Booking time slot:", selectedTime);
 
-      if (response.status === 201) {
+      if (response.status >= 200) {
         // Assuming a successful booking
 
         const appointmentDate = response.data.appointment?.appointmentDate;
@@ -687,36 +659,9 @@ const BookingPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Afternoon Slots */}
-                {/* <div className="bg-white rounded-xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.12)] transition-shadow duration-200">
-                  <h3 className="text-lg font-medium text-gray-700 flex items-center gap-2 mb-4">
-                    <Clock className="w-5 h-5 text-blue-500" />
-                    Afternoon Slots
-                  </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {afternoonSlots.length > 0 ? (
-                      afternoonSlots.map((slot) => (
-                        <button
-                          key={slot}
-                          onClick={() => setSelectedSlot(slot)}
-                          className={`px-4 py-3 rounded-xl text-center transition-all duration-200 ${
-                            selectedSlot === slot
-                              ? "bg-blue-500 text-white shadow-lg shadow-blue-500/25 transform scale-105"
-                              : "bg-gray-50 text-gray-600 hover:bg-gray-100 hover:shadow-md hover:scale-102 shadow-sm"
-                          }`}
-                        >
-                          {slot} PM
-                        </button>
-                      ))
-                    ) : (
-                      <h1 className="col-span-4 text-center text-gray-500">
-                        No slots available
-                      </h1>
-                    )}
-                  </div>
-                </div> */}
+               
               </div>
-              {/* Clinical Details Section */}
+            
               <div className="lg:w-[380px] flex-shrink-0">
                 <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl shadow-xl p-6 sticky top-6">
                   <h3 className="text-xl font-semibold text-white mb-4">
@@ -776,7 +721,4 @@ const BookingPage: React.FC = () => {
 };
 
 export default BookingPage;
-// function uuidv4(): string {
-//   throw new Error("Function not implemented.");
-// }
 

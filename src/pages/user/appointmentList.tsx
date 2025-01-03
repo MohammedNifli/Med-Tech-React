@@ -57,7 +57,7 @@ const AppointmentList: React.FC = () => {
           `/appointment/appointmentlist/?id=${userId}`
         );
         const fetchedAppointments = response.data.fetchedAppointments;
-        console.log(">>>>>>>>>>",fetchedAppointments)
+      
         categorizeAppointments(fetchedAppointments);
       } catch (error) {
         console.error("Error fetching appointments:", error);

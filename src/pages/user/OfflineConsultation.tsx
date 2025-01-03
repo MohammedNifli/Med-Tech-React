@@ -80,9 +80,9 @@ const [viewFeedback, setViewFeedback] = useState<ViewFeedback | null>(null);
           fetchedAppointments?.data?.fetchAppointments || []
         ).map((appointment: { appointmentDate: string; }) => ({
           ...appointment,
-          appointmentDate: formatDate(appointment.appointmentDate), // Assuming formatDate is a function that formats the date
+          appointmentDate: formatDate(appointment.appointmentDate), 
         }));
-        console.log("froemattedAppoin", formattedAppointments);
+       
 
         setConsultations(formattedAppointments);
         console.log("bhpooo", consultations);
@@ -106,14 +106,7 @@ const [viewFeedback, setViewFeedback] = useState<ViewFeedback | null>(null);
 
  const handleViewFeedback = async (consultation: Consultation) => {
      try {
-      //  setDocId(consultation.doctorId);
-      //  setPatientId(consultation.patientId);
-      //  setUserId(consultation.userId);
-
-      console.log('.............../////////',consultation.userId,
-        consultation.patientId,
-        consultation.doctorId)
- 
+     
        const response = await fetchedFeedbackAndRating(
          consultation.userId,
          consultation.patientId,
@@ -377,11 +370,10 @@ const [viewFeedback, setViewFeedback] = useState<ViewFeedback | null>(null);
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex space-x-2">
-                          {/* Join Button: Only accessible if the status is "confirmed" */}
-
-                          {/* Rate & Feedback Button: Only accessible if there's no feedback yet */}
+                          
+                         
                           {consultation.hasFeedback ? (
-                            // Show the "View" button if feedback exists
+                         
                             <button
                               onClick={() => handleViewFeedback(consultation)}
                               className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
@@ -390,7 +382,7 @@ const [viewFeedback, setViewFeedback] = useState<ViewFeedback | null>(null);
                               View
                             </button>
                           ) : consultation.status === "completed" ? (
-                            // Show the "Rate & Feedback" button if status is "completed"
+                            
                             <button
                               onClick={() => handleFeedback(consultation)}
                               className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
@@ -398,7 +390,7 @@ const [viewFeedback, setViewFeedback] = useState<ViewFeedback | null>(null);
                               Rate & Feedback
                             </button>
                           ) : (
-                            // Show a disabled "Rate & Feedback" button when conditions are not met
+                           
                             <button
                               className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-500 bg-gray-300 cursor-not-allowed border border-gray-300 rounded-lg"
                               disabled

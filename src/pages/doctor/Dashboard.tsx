@@ -137,9 +137,7 @@ const Dashboard: React.FC = () => {
   const [femalePatient, setFemalePatient] = useState(0);
 
   const [chartData, setChartData] = useState([]);
-  // Sample datasets for different time ranges
-
-  // Helper function to generate the calendar
+ 
   const generateCalendar = () => {
     const startOfMonth = new Date(
       currentDate.getFullYear(),
@@ -159,7 +157,7 @@ const Dashboard: React.FC = () => {
     let week = [];
 
     for (let i = 0; i < startDay; i++) {
-      week.push(null); // Empty slots for days before the start of the month
+      week.push(null);
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
@@ -205,7 +203,7 @@ const Dashboard: React.FC = () => {
       const appointmentsCount = await axiosInstance.get(
         `/appointment/today/count?id=${doctorId}`
       );
-      console.log("uyiuiuappppooo", appointmentsCount);
+     
       if (appointmentsCount?.status == 404) {
         toast.error("Today you have not appointments");
       }
@@ -305,13 +303,6 @@ const Dashboard: React.FC = () => {
     timeBasedChart();
   }, [doctorId]);
 
-  // const total = consultationData.reduce((acc, item) => acc + item.value, 0);
-  // const data =
-  //   timeRange === "daily"
-  //     ? dailyData
-  //     : timeRange === "monthly"
-  //     ? monthlyData
-  //     : yearlyData;
   return (
     <div className="ml-8">
   <ToastContainer />

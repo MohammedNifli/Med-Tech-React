@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import SideComponent from '../components/doctorSide/sideComponent';
-import DocHeader from '../components/doctorSide/Header';
+import SideComponent from '../components/doctor/sideComponent';
+import DocHeader from '../components/doctor/Header';
 
 // Doctor Layout Component
 const DoctorLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {

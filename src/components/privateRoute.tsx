@@ -17,10 +17,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
     const hasAccess = allowedRoles ? allowedRoles.includes(user?.role ?? '') : true; 
     const isBlocked = localStorage.getItem('isBlocked') === 'true'; // Correctly retrieving isBlocked
 
-    // console.log('User:', user);
-    // console.log('isAuthenticated:', isAuthenticated);
-    // console.log('hasAccess:', hasAccess);
-    // console.log('isBlocked:', isBlocked);
+    
 
     if (!isAuthenticated || !hasAccess || isBlocked) {
       dispatch(logout())

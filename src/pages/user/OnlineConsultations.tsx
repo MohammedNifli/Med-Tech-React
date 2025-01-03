@@ -84,10 +84,7 @@ const OnlineConsultations: React.FC = () => {
   const [UserId, setUserId] = useState("");
   const [patientId, setPatientId] = useState("");
 
-  // const [checkAlready, setCheckAlready] = useState("");
-
-  // const [prevComment, setPrevComment] = useState("");
-  // const [prevStar, setPrevStar] = useState("");
+  
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -95,7 +92,7 @@ const OnlineConsultations: React.FC = () => {
 
       try {
         const fetchedAppointments = await fetchingAllOnlineAppointments(userId);
-        console.log("fethcedAppointment>>>", fetchAppointments);
+       
         const formattedAppointments = fetchedAppointments.map(
           (appointment: { appointmentDate: string; }) => ({
             ...appointment,
@@ -212,7 +209,7 @@ const OnlineConsultations: React.FC = () => {
     };
 
     const handleSaveFeedback = () => {
-      // Save the updated feedback (add your save logic here)
+    
       console.log("Saved feedback:", {
         rating: editableRating,
         comment: editableComment,

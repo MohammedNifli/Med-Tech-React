@@ -3,7 +3,8 @@ import { Menu, X, User, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../slices/authSlice';
-import axios from 'axios';
+
+import axiosInstance from '@/utils/axiosClient';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,16 +14,25 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Function to check login status
   const checkLoginStatus = () => {
     const accessToken = localStorage.getItem('accessToken');
-    setIsLoggedIn(!!accessToken); // Set true if token exists, otherwise false
+    setIsLoggedIn(!!accessToken);
   };
 
   useEffect(() => {
-    checkLoginStatus(); // Check login status on component mount
-  }, []);
+    checkLoginStatus();
 
+    const handleStorageChange = () => {
+      checkLoginStatus();
+    };
+
+  
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -38,7 +48,7 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('https://med-tech.site/user/logout', {}, {
+      const response = await axiosInstance.post('/user/logout', {}, {
         withCredentials: true,
       });
       console.log('Response of logout:', response);

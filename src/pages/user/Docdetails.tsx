@@ -14,22 +14,6 @@ import { toast, ToastContainer } from "react-toastify";
 import { Doctor } from '../../types/doctor';
 import axiosInstance from "../../utils/axiosClient";
 import axios from "axios";
-// import axios from "axios";
-
-
-// Dummy doctor data
-
-// interface TimeSlot {
-//   _id?: string;  
-//   date:string;
-//   startTime: string;
-//   endTime: string;
-//   status:string;
-// }
-
-// interface RouteParams {
-//   id: string;
-// }
 
 
 interface clinicData{

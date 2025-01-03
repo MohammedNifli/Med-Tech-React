@@ -18,7 +18,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 
-import WithdrawalModal from "../../components/doctorSide/withdrawalComponent";
+import WithdrawalModal from "../../components/doctor/withdrawalComponent";
 import axiosInstance from "@/utils/axiosClient";
 import { useSelector } from "react-redux";
 import { RootState } from "@/reduxStore/store";
@@ -58,20 +58,13 @@ const DoctorWallet: React.FC = () => {
   console.log("doctorId", doctorId);
 
   const [withdrawModal, setWithdrawModal] = useState(false);
-  // const [withdrawAmount, setWithdrawAmount] = useState("");
-  // const [withdrawNotes, setWithdrawNotes] = useState("");
+ 
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const [totalAmount, setTotalAmount] = useState();
   const [docName, setDoctorName] = useState("");
-  // const paymentHistory = [
-  //   { id: 1, date: "2024-11-25", amount: "$120.50", status: "Completed" },
-  //   { id: 2, date: "2024-11-24", amount: "$80.00", status: "Pending" },
-  //   { id: 3, date: "2024-11-23", amount: "$200.75", status: "Completed" },
-  //   { id: 4, date: "2024-11-22", amount: "$50.00", status: "Failed" },
-  // ];
-
+ 
   useEffect(() => {
     const doctorDetails = async () => {
       const response = await axiosInstance.get(
@@ -105,9 +98,9 @@ const DoctorWallet: React.FC = () => {
   };
 
   const handleWithdrawConfirm = (amount: number) => {
-    // Add your withdrawal logic here
+
     console.log(`Withdrawing ${amount}`);
-    // Typically, you'd call an API or update state here
+  
   };
 
   return (

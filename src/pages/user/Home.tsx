@@ -1,98 +1,14 @@
 import React from "react";
 
-// import { TiTick } from "react-icons/ti";
 
 import { Heart, Eye, Baby, Smile, Clock, MessageCircle, Shield } from "lucide-react";
 
-// interface SpecialtyInfo {
-//   description: string;
-//   image: string;
-// }
-
-// interface Specialty {
-//   name: string;
-//   description: string;
-//   image: string;
-// }
-// Define the structure for the entire specialties data object
-// const specialtiesData: Record<string, SpecialtyInfo> = {
-//   Cardiology: {
-//     description: "Specializing in diagnosis and treatment of heart diseases.",
-//     image: "pictures/cardiology.jpg",
-//   },
-//   Neurology: {
-//     description: "Focusing on disorders of the nervous system.",
-//     image: "pictures/neurology.jpg",
-//   },
-//   Pediatrics: {
-//     description:
-//       "Providing medical care for infants, children, and adolescents.",
-//     image: "pictures/ped.jpg",
-//   },
-//   Orthopedics: {
-//     description:
-//       "Dealing with conditions involving the musculoskeletal system.",
-//     image: "pictures/orthopedics.jpg",
-//   },
-//   Dermatology: {
-//     description:
-//       "Specializing in conditions and diseases of the skin, nails, and hair.",
-//     image: "pictures/dermatology.jpg",
-//   },
-// };
-
 const Home: React.FC = () => {
-  // const [specialties, setSpecialties] = useState([]);
-
-  // useEffect(() => {
-  //   const fetchSpecialties = async () => {
-  //     try {
-  //       console.log("Fetching specialties...");
-  //       const response = await axios.get<{ specializations: Specialty[] }>(
-  //         "http://localhost:4444/user/specializations"
-  //       );
-  //       console.log("Response received:", response.data.specializations); // Access the data properly
-  //       setSpecialties(response.data.specializations); // Set the correct field to the state
-  //     } catch (error: any) {
-  //       if (error.response) {
-  //         console.error(
-  //           "Error response from server:",
-  //           error.response.status,
-  //           error.response.data
-  //         );
-  //       } else if (error.request) {
-  //         console.error("No response received:", error.request);
-  //       } else {
-  //         console.error("Error setting up the request:", error.message);
-  //       }
-  //     }
-  //   };
-
-  //   fetchSpecialties();
-  // }, []);
-
+  
   return (
     <section className="bg-white py-8 mt-16 sm:mt-24">
       <div className="container mx-auto px-4 ">
-        {/* Search Container */}
-        {/* <div className="max-w-4xl mx-auto mb-8 sm:mb-12">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="w-full sm:w-1/3">
-              <input
-                type="text"
-                placeholder="Location"
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              />
-            </div>
-            <div className="w-full sm:w-2/3">
-              <input
-                type="text"
-                placeholder="Search doctors, clinics, hospitals..."
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-        </div> */}
+        
 
         {/* Banner Container */}
         <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-xl overflow-hidden shadow-lg mb-8 sm:mb-12">
@@ -181,37 +97,7 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        {/* Specialties Section */}
-        {/* <div className="bg-slate-100 rounded-lg w-full py-8 sm:py-12 mt-7">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-6 sm:mb-8">
-            Our Specialties
-          </h2>
-
-          <div className="cursor-auto container mx-auto px-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {Object.entries(specialtiesData).map(([name, info], index) => (
-                <div
-                  key={index}
-                  className="flex bg-white rounded-lg shadow-md overflow-hidden transition duration-300 ease-in-out hover:shadow-lg hover:scale-105"
-                >
-                  <img
-                    src={info.image}
-                    alt={`${name} specialty`}
-                    className="w-1/2 h-1/2    "
-                  />
-                  <div className="p-4 sm:p-6 mt-0">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
-                      {name}
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-600">
-                      {info.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div> */}
+        
 
         <div className="mt-12 w-full bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="flex flex-col md:flex-row w-full h-auto">

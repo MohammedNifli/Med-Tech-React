@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { TableColumn } from '../../components/reusable/TableComponent'; // Make sure the path is correct
-import TableComponent from '../../components/reusable/TableComponent'; // Make sure the path is correct
+import TableComponent from '../../components/reusable/TableComponent';
 import axiosInstance from '@/utils/axiosClient';
 
-// Define the patient data type based on your API response
+
 interface Patient {
   _id: string;
   name: string;

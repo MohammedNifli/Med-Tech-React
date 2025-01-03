@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reduxStore/store";
 import { ToastContainer, toast } from "react-toastify";
 import { applyForApproval } from "../../services/doctorServices";
-import PasswordModal from "../../components/doctorSide/passwordModal";
+import PasswordModal from "../../components/doctor/passwordModal";
 import { uploadFileToS3 } from "../../utils/s3Upload";
 import axiosInstance from "@/utils/axiosClient";
 
@@ -988,58 +988,7 @@ const Application: React.FC = () => {
   );
 };
 
-// const InputField = ({
-//   label,
-//   name,
-//   type = "text",
-//   options = [],
-//   value,
-//   checked,
-//   onChange,
-//   error,
-// }) => (
-//   <div className="flex flex-col">
-//     <label htmlFor={name} className="text-gray-600 font-semibold">
-//       {label}
-//     </label>
-//     {type === "select" ? (
-//       <select
-//         id={name}
-//         name={name}
-//         value={value}
-//         onChange={onChange}
-//         className={`border rounded-md px-2 py-2 ${error ? 'border-red-600' : 'border-gray-900'}`}
-//       >
-//         <option value="">Select {label}</option>
-//         {options.map((option, index) => (
-//           <option key={index} value={option}>
-//             {option}
-//           </option>
-//         ))}
-//       </select>
-//     ) : type === "checkbox" ? (
-//       <input
-//         id={name}
-//         name={name}
-//         type="checkbox"
-//         checked={checked}
-//         onChange={onChange}
-//         className="mt-2"
-//       />
-//     ) : (
-//       <input
-//         id={name}
-//         name={name}
-//         type={type}
-//         value={value}
-//         onChange={onChange}
-//         className={`border rounded-md px-2 py-2 ${error ? 'border-red-600' : 'border-gray-900'}`}
-//         placeholder={`Enter ${label}`}
-//       />
-//     )}
-//     {error && <span className="text-red-600 text-sm">{error}</span>} {/* Display error message */}
-//   </div>
-// );
+
 
 export default Application;
 

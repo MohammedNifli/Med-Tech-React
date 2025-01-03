@@ -3,7 +3,7 @@ import axiosInstance from "@/utils/axiosClient";
 import TableComponent, { TableColumn } from "../../components/reusable/TableComponent";
 
 interface Appointment {
-  _id: string; // Ensure this matches the generic type constraint
+  _id: string; 
   patientName: string;
   doctorName: string;
   appointmentDate: string;

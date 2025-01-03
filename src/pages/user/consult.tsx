@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-// import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 import axiosInstance from '@/utils/axiosClient';
 
@@ -26,32 +26,7 @@ const Consult: React.FC = () => {
   const [,setEmail]=useState<string|''>('')
   
 
-//   const handleSubmit = async (event: React.FormEvent) => {
-//     event.preventDefault();
-
-//     try {
-//         // Define the amount (in paise) and currency
-//         const amount = 5000; // Amount in paise (e.g., 5000 for INR 50.00)
-//         const currency = 'inr';
-
-//         // Call your backend to create a payment session
-//         const response = await axios.post('http://localhost:4444/appointment/payment', {
-//             amount,
-//             currency,
-//         });
-
-//         const { url } = response.data; // Get the URL from the response
-//         console.log("Redirecting to Stripe Checkout:", url);
-
-//         // Redirect to the Stripe Checkout session
-//         window.location.href = url; // Redirect to the Stripe Checkout page
-//     } catch (error) {
-//         console.error('Error processing payment:', error);
-//     }
-// };
-
 useEffect(() => {
-  // Make sure patientId exists before making the request
   if (appointmentId) {
     axiosInstance
       .get(`/appointment/get-details/?id=${appointmentId}`) // Use dynamic URL here
@@ -60,7 +35,7 @@ useEffect(() => {
         setPatientDetails(response.data?.patientDetails)
         setPatientName(response?.data?.patientDetails?.name)
         setAmount(response?.data?.amount)
-        // Handle your response data, e.g., set state
+        
       })
       .catch((error) => {
         console.error("Error fetching patient details:", error);
@@ -127,10 +102,7 @@ const handleSubmit = async (event: React.FormEvent) => {
                 />
               </div>
 
-              {/* Card Element for Stripe */}
              
-
-              {/* Continue Button */}
               <div className="pt-4">
                 <button 
                   type="submit"

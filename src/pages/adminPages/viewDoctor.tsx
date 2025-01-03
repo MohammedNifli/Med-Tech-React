@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+
 import {
   approveApplication,
   rejectApplication,
 } from "../../services/adminServices";
+import axiosInstance from "@/utils/axiosClient";
 
 interface Clinic {
   name: string;
@@ -13,8 +14,8 @@ interface Clinic {
 
 interface ProfessionalInfo {
   specialization: string;
-  certificates?: { file: string }[]; // Array of certificate objects
-  licenseFile?: string; // Single license file URL
+  certificates?: { file: string }[]; 
+  licenseFile?: string; 
 }
 
 interface AccountStatus {
@@ -47,7 +48,7 @@ const ViewDoctor: React.FC = () => {
 
   const fetchDoctorData = useCallback(async () => {
     try {
-      const response = await axios.get<{ doctorProfile: DoctorProfile }>(
+      const response = await axiosInstance.get<{ doctorProfile: DoctorProfile }>(
         `/doctor/profile?id=${id}`,
         { withCredentials: true }
       );
@@ -167,7 +168,7 @@ const ViewDoctor: React.FC = () => {
         </div>
       </div>
 
-      {/* Document and Actions Section */}
+     
       {!showModal && (
         <div className="border border-gray-300 bg-gray-50 shadow-md mt-3 mx-3 w-3/4">
           <table className="w-full">

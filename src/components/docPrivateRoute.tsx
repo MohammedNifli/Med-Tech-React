@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../reduxStore/store'; // Adjust the import path as needed
+import { RootState } from '../reduxStore/store'; 
 import { logoutDoctor } from '../slices/doctorSlice';
 
 interface DocPrivateRouteProps {
@@ -12,7 +12,7 @@ const DocPrivateRoute: React.FC<DocPrivateRouteProps> = ({ children }) => {
     const dispatch = useDispatch();
     const { isAuthenticated, isBlocked } = useSelector((state: RootState) => state.doctor);
 
-    // Check if `isBlocked` is true either in Redux state or `localStorage`
+    
     const isBlockedInStorage = localStorage.getItem('isBlocked') === 'true';
     console.log("isBlocked",isBlockedInStorage)
 
@@ -22,7 +22,7 @@ const DocPrivateRoute: React.FC<DocPrivateRouteProps> = ({ children }) => {
         }
     }, [isAuthenticated, isBlocked, isBlockedInStorage, dispatch]);
 
-    // Redirect if unauthenticated or blocked
+   
     if (!isAuthenticated || isBlocked || isBlockedInStorage) {
         return <Navigate to="/doctor/login" replace />;
     }

@@ -17,14 +17,13 @@ const DocLogin: React.FC = () => {
 
         const response = await doctorLogin(email, password);
     
-        console.log("Response:", "wow");
 
         if (response.status === 201) {
             const { id, name, specialization, refreshToken, accessToken, isBlocked } = response.data;
             const localBlock=localStorage.getItem('isBlocked')=='true';
 
             if (isBlocked==true || localBlock==true) {
-                // Dispatch logout action and show error message for blocked account
+                
                 dispatch(logoutDoctor());
                 toast.error('Your account is blocked. Please contact support.');
                 return;
@@ -37,7 +36,7 @@ const DocLogin: React.FC = () => {
                 specialization,
             };
 
-            // Dispatch login success action with doctor info and tokens
+           
             dispatch(
                 loginDoctorSuccess({
                     doctorInfo: doctor,
@@ -46,7 +45,7 @@ const DocLogin: React.FC = () => {
                     isBlocked,
                 })
             );
-            console.log("prrrrrrrrrrrrrrr")
+          
             navigate('/doctor/home');
 
             toast.success('Logged in successfully!');

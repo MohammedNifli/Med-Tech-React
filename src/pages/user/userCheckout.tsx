@@ -14,40 +14,27 @@ import axiosInstance from '@/utils/axiosClient';
         
         console.log("patientName",patient)
     const [, setPatientName] = useState('');
-    // const [couponCode, setCouponCode] = useState('');
-    // const [showCouponModal, setShowCouponModal] = useState(false);
+    
     const [isNameValid, setIsNameValid] = useState(true);
 
-    // const handleCouponCodeToggle = () => {
-    //     setShowCouponModal(!showCouponModal);
-    // };
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPatientName(e.target.value);
-        // Simple validation (could be extended further)
+        
         if (e.target.value.length > 0) {
         setIsNameValid(true);
         }
     };
 
-    // const handleCheckout = () => {
-    //     if (patientName.length === 0) {
-    //     setIsNameValid(false);
-    //     return;
-    //     }
-    //     // Proceed to payment logic
-    //     console.log("Proceeding to payment with patient:", patientName);
-    // };
-
     const handleCheckout = async (event: React.FormEvent) => {
             event.preventDefault();
         
             try {
-                // Define the amount (in paise) and currency
-                const amount =totalAmount; // 6000Amount in paise (e.g., 5000 for INR 50.00)
+             
+                const amount =totalAmount; 
                 const currency = 'inr';
         
-                // Call your backend to create a payment session
+                
                 const response = await axiosInstance.post('/appointment/payment', {
                     amount,
                     currency,
@@ -55,13 +42,12 @@ import axiosInstance from '@/utils/axiosClient';
                     userId
                 });
                  
-                const { url } = response.data; // Get the URL from the response
-                console.log('payyyyyyyy',response)
-                console.log(response)
-                console.log("Redirecting to Stripe Checkout:", url);
+                const { url } = response.data; 
+              
+                
         
                
-                window.location.href = url// Redirect to the Stripe Checkout page
+                window.location.href = url
             } catch (error) {
                 console.error('Error processing payment:', error);
             }
@@ -94,22 +80,7 @@ import axiosInstance from '@/utils/axiosClient';
                     {!isNameValid && <p className="text-red-500 text-xs mt-1">Patient name is required.</p>}
                 </div>
 
-                {/* <div>
-                    <button onClick={handleCouponCodeToggle} className="text-blue-500 text-sm hover:underline">
-                    Have a coupon code?
-                    </button>
-                    {showCouponModal && (
-                    <div className="mt-4">
-                        <input
-                        type="text"
-                        value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value)}
-                        placeholder="Enter coupon code"
-                        className="w-full px-4 py-2 border rounded-lg"
-                        />
-                    </div>
-                    )}
-                </div> */}
+                
 
                 <div className="flex items-center space-x-2 mt-11">
                     <span className="text-lg">₹</span>

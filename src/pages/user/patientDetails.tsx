@@ -92,7 +92,7 @@ const PatientDetails: React.FC = () => {
 
   const handleSubmit = async (values: unknown) => {
     try {
-      // Save the patient data
+ 
       const response = await axiosInstance.post(
         "/patient/add",
         { formData: values },
@@ -103,7 +103,7 @@ const PatientDetails: React.FC = () => {
       
         const patientId = response.data?.newPatient?._id;
 
-        // Update the patientId in the appointment
+
         try {
           const updateResponse = await axiosInstance.post(
             "/appointment/update",
@@ -113,14 +113,11 @@ const PatientDetails: React.FC = () => {
 
           console.log("updateResponse",updateResponse)
       
-
-          // Navigate to the consult page after successful update
           toast.success("Patient data saved");
 
-          // Wait for the toast to be shown before navigating
           setTimeout(() => {
             navigate("/consult", { state: { appointmentId } });
-          }, 500); // Adjust the timeout value as needed
+          }, 500);
   
         } catch (updateError) {
           toast.error("Failed to update appointment with patient data");

@@ -13,7 +13,7 @@ const AdminLogin: React.FC = () => {
 
   const handleSubmit = async (email: string, password: string) => {
     try {
-      console.log(email, password); // Temporary logging for testing
+      console.log(email, password); 
 
       const response = await adminLogin(email,password)
       console.log(response)

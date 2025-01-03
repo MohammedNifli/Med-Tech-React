@@ -8,7 +8,7 @@ interface IsAuthenticatedRouteProps {
 }
 
 const IsAuthenticatedRoute: React.FC<IsAuthenticatedRouteProps> = ({ children }) => {
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+
   const user = useSelector((state: RootState) => state.auth.user);
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 

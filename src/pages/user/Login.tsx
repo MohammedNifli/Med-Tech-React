@@ -13,6 +13,7 @@ import {  setTokens } from '../../slices/authSlice';
 
 // Service imports
 import { loginUser } from '../../services/userServices';
+import axiosInstance from '@/utils/axiosClient';
 
 // Type Definitions
 interface FormErrors {
@@ -149,39 +150,39 @@ const Login: React.FC = () => {
   // Google OAuth Success Handler
   const handleGoogleSuccess = async (response: GoogleCredentialResponse): Promise<void> => {
     try {
-      const res = await fetch('http://localhost:4444/user/auth/google', {
-        method: 'POST',
+      const res = await axiosInstance.post<GoogleOAuthResponse>('/user/auth/google', {
+        token: response.credential,
+      }, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token: response.credential }),
       });
-      
-      if (!res.ok) {
+  
+      if (res.status < 200 || res.status >= 300) {
         throw new Error('Network response was not ok');
       }
   
-      const data: GoogleOAuthResponse = await res.json();
-      
+      const data = res.data;
+  
       const userData: UserData = {
         _id: data.user._id,
         name: data.user.name,
         email: data.user.email,
-        role: 'user'
+        role: 'user',
       };
-
+  
       dispatch(
         setTokens({
           userData,
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
-          isBlocked: false
+          isBlocked: false,
         })
       );
-      
+  
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-
+  
       toast.success(data.message);
       navigate('/');
     } catch (error: unknown) {
@@ -189,8 +190,9 @@ const Login: React.FC = () => {
       toast.error('An error occurred with Google login');
     }
   };
+  
 
-  // Google OAuth Failure Handler
+
   const handleGoogleFailure = (): void => {
     toast.error('Google login failed');
   };

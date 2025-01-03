@@ -5,17 +5,17 @@ import OTPComponent from '../../components/reusable/otpCompnent';
 import { toast } from 'react-toastify';
 import { otpResend, verifyOtp } from '../../services/userServices';
 
-// User OTP Page
+
 export const UserOTPPage:React.FC = () => {
   const location = useLocation();
   const email:string = location.state?.email || '';
   const navigate = useNavigate();
 
   const handleSubmit = async (otp: string) => {
-    // Call the service function to verify OTP
+ 
     const response = await verifyOtp(otp, email);
   
-    // If the response is successful, show success message and navigate
+ 
     if (response.status === 200) {
       toast.success('OTP verified successfully');
       navigate('/login');
