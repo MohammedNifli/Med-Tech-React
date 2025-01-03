@@ -5,9 +5,9 @@ import Signup from '../pages/user/Signup';
 import Login from '../pages/user/Login';
 import UserOTPPage from '../pages/user/Otp';
 
-import Profile from '../components/userProfile';
+import Profile from '../pages/user/userProfile';
 import Docdetails from '../pages/user/Docdetails';
-import IsAuthenticatedRoute from '../components/IsAuthenticatedRoute';
+import IsAuthenticatedRoute from '../components/user/IsAuthenticatedRoute';
 import PateintDetails from '../pages/user/patientDetails';
 import Consult from '../pages/user/consult';
 import UserCheckout from '../pages/user/userCheckout';

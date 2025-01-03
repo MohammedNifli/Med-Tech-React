@@ -7,8 +7,8 @@ import AdminLayout from './layouts/adminLayout';
 import userRoutes from './routes/userRoutes';
 import doctorRoutes from './routes/doctorRoutes';
 import adminRoutes from './routes/adminRoute';
-import PrivateRoute from './components/privateRoute'; 
-import DocPrivateRoute from './components/docPrivateRoute';
+import PrivateRoute from './components/user/privateRoute'; 
+import DocPrivateRoute from './components/doctor/doctorPrivateRoute';
 // import IsAuthenticatedRoute from '../src/components/IsAuthenticatedRoute';
 import UserLogin from './pages/user/Login';  // Import User Login Component
 import DoctorLogin from './pages/doctor/docLogin'; // Import Doctor Login Component

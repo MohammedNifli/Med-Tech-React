@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../reduxStore/store'; 
-import { logoutDoctor } from '../slices/doctorSlice';
+import { RootState } from '../../reduxStore/store'; 
+import { logoutDoctor } from '../../slices/doctorSlice';
 
 interface DocPrivateRouteProps {
     children: React.ReactNode;

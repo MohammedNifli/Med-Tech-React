@@ -313,13 +313,13 @@ const BookingPage: React.FC = () => {
       console.log("response from booking appointment", response);
 
       console.log("Booking time slot:", selectedTime);
-      console.log("wooow",response.status)
+
 
       if (response.status >= 200) {
-        // Assuming a successful booking
+       
 
-        const appointmentDate = response.data.appointment?.appointmentDate;
-        const time = response.data.appointment.timeSlot;
+        const appointmentDate = response.data.result?.appointmentDate;
+        const time = response.data.result.timeSlot;
         console.log("date of the appointment", appointmentDate, time);
         const respo = await axiosInstance.post(`/user/slot-status`, {
           docId,
@@ -329,7 +329,7 @@ const BookingPage: React.FC = () => {
         console.log("respo", respo);
         toast.success("Appointment booked successfully!");
 
-        navigate("/patient", { state: { Id: response.data.appointment._id } });
+        navigate("/patient", { state: { Id: response.data.result._id } });
     
     }
     } catch (error) {

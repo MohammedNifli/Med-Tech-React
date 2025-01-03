@@ -1,19 +1,16 @@
-
-
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 
 const axiosInstance = axios.create({
-  baseURL: "https://med-tech.site",
-
-  withCredentials: true, 
+  baseURL: "http://localhost:4444",
+  withCredentials: true,
 });
-
 
 axiosInstance.interceptors.request.use(
   (config) => {
- 
     return config;
   },
   (error) => {
@@ -21,27 +18,22 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-   
     if (error.response) {
-      
-      alert(`Error: ${error.response.data.message || "An error occurred"}`);
+      toast.error(`Error: ${error.response.data.message || "An error occurred"}`);
     } else if (error.request) {
-      // Request was made but no response was received
-      console.error("Error Request:", error.request);
-      alert("Error: No response from server");
+     ;
+      toast.error("Error: No response from server");
     } else {
-      // Something happened in setting up the request
-      console.error("Error Message:", error.message);
-      alert(`Error: ${error.message}`);
+ 
+      toast.error(`Error: ${error.message}`);
     }
 
-    return Promise.reject(error); // Propagate the error to the calling code
+    return Promise.reject(error);
   }
 );
 

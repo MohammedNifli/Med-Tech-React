@@ -6,7 +6,7 @@ import ApplyApproval from '../pages/doctor/applyStatus';
 import Application from '../pages/doctor/Application';
 import Slot from '../pages/doctor/Slot';
 import DoctorOTPPage from '../pages/doctor/docOtp';
-import IsAuthenticatedRoute from '../components/IsDoctorAuthenticated';
+import IsAuthenticatedRoute from '../components/doctor/IsDoctorAuthenticated';
 import Chat from '../pages/user/ChatPage'
 import AppointmentList from '../pages/doctor/appointmentList';
 import Dashboard from '../pages/doctor/Dashboard';

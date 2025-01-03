@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../reduxStore/store";
+import { RootState } from "../../reduxStore/store";
 import {
   Box,
   VStack,
@@ -24,12 +24,12 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { fetchingProfileDetaills, updateUserProfile } from "../services/userServices";
-import axiosInstance from "../utils/axiosClient";
+import { fetchingProfileDetaills, updateUserProfile } from "../../services/userServices";
+import axiosInstance from "../../utils/axiosClient";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import axios from "axios";
-import {uploadFileToS3} from '../utils/s3Upload'
+import {uploadFileToS3} from '../../utils/s3Upload'
 
 interface ProfileData {
   name: string;
