@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 const axiosInstance = axios.create({
-  baseURL: "http://med-tech.site",
+  baseURL: "https://med-tech.site",
   withCredentials: true,
 });
 
